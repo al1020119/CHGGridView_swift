@@ -14,6 +14,7 @@ enum CHGTabLocation {
     case Down
 }
 
+///CHGTabPage的DataSource
 protocol CHGTabPageDataSource:CHGTabDataSource {
     ///返回Page的cell
     func cell(forGridView gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell

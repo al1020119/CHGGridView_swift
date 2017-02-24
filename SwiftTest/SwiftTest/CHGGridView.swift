@@ -18,6 +18,13 @@ protocol CHGGridViewDataSource :NSObjectProtocol {
     func cell(forGridView gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell
 }
 
+///GridView的代理
+protocol CHGGridViewDelegate {
+    ///item被点击
+    func gridView(gridView:CHGGridView, didSelecteAtIndex position:NSInteger) -> Void
+    
+}
+
 ///CHGGridView滑动delegate
 protocol CHGGridViewScrollDelegate {
     ///手指开始拖动
@@ -44,7 +51,9 @@ enum ScrollDirection {
 ///CHGGridView 主要实现横向的网格试图， 具有定时滚动，循环滚动 动态添加网格数量等功能
 class CHGGridView: UIScrollView,UIScrollViewDelegate{
     ///DataSource数据源
-    weak open var gridViewDataSource: CHGGridViewDataSource?
+    open var gridViewDataSource: CHGGridViewDataSource?
+    ///CHGGridView的delegate
+    open var gridViewDelegate:CHGGridViewDelegate?
     ///一页最多能显示的cell数量
     var maxCellsOfOnePage:NSInteger = 0
     /// 一页中最多的列数
@@ -235,9 +244,15 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let cell:CHGGridViewCell = (gridViewDataSource?.cell(forGridView: self, itemAtIndex: ii, withData: data?.object(at: ii) as AnyObject))!
         cell.frame = self.calculateFrameWithPosition(position: ii, andColumn: column, andPage: page)
         cell.tag = ii
+        cell.addTarget(self, action:#selector(itemTouchUpInside(sender:)), for: UIControlEvents.touchUpInside)
         if !isResize {
             self.addSubview(cell)
         }
+    }
+    
+    ///按钮被点击
+    func itemTouchUpInside(sender:AnyObject) -> Void {
+        gridViewDelegate?.gridView(gridView: self, didSelecteAtIndex: sender.tag)
     }
     
     ///计算cell的frame
