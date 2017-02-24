@@ -28,7 +28,7 @@ protocol CHGTabDataSource {
     ///返回滑块
     func tabSlider() -> CHGSlider
     ///获取tab的宽度 tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth 有用
-    func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger) -> CGFloat
+    func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat
 }
 
 ///CHGTabDelegate
@@ -161,7 +161,7 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
             let x = CGFloat(position) * (itemWidth + spacing) + spacing
             rect = CGRect(x: x, y: sliderLocation == CHGSliderLocation.Down ? 0 : sliderHeight, width: itemWidth, height: self.frame.height - sliderHeight)
         } else {
-            let width:CGFloat = (tabDataSource?.tabScrollWidth(tab: self, withPosition: position))!
+            let width:CGFloat = (tabDataSource?.tabScrollWidth(tab: self, withPosition: position,withData: data?.object(at: position) as AnyObject))!
             rect = CGRect(x: self.contentSize.width + spacing, y: sliderLocation == CHGSliderLocation.Down ? 0 : sliderHeight, width: width, height: self.frame.height - sliderHeight)
             scrollTabItemRects.setValue(rect, forKey: String(position))
         }

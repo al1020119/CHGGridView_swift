@@ -24,7 +24,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
         tabPage?.tabPageDataSource = self               //代理
         tabPage?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")//注册nib文件， 类似 UITableViewCell 的用法 ,优化性能能
         tabPage?.registerNibName(nibName: "MyCHGGridViewCell2", forCellReuseIdentifier: "MyCHGGridViewCell2")
-        tabPage?.data = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13"]//添加数据，这里的数据可以自己定义
+        tabPage?.data = simaluData()//添加数据，这里的数据可以自己定义
         tabPage?.tabLocation = CHGTabLocation.Top
         tabPage?.tabItemLayoutMode = CHGTabItemLayoutMode.AutoWidth
         tabPage?.spacing = 5                            //Tab中item的间距
@@ -34,6 +34,24 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func simaluData() -> NSArray {
+        let data:NSMutableArray = NSMutableArray()
+        //        for i in 0 ..< columns * rows * 4{
+        //            data[i] = i
+        //        }
+        data.add("头条")
+        data.add("要闻")
+        data.add("娱乐")
+        data.add("热点")
+        data.add("体育")
+        data.add("上海")
+        data.add("视频")
+        data.add("网易号")
+        data.add("财经")
+        data.add("轻松一刻")
+        return data
     }
     
     @IBAction func addItem(sender:AnyObject) {
@@ -103,7 +121,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
     func tab(tab:CHGTab,itemAtIndex position:NSInteger,withData data:AnyObject) -> CHGTabItem {
         let tabItem:CHGTabItem = CHGTabItem.initWithNibName(nibName: "TabItem1")
         tabItem.setItemData(data: data,position: position)
-        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.green
+//        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.green
         return tabItem
     }
     
@@ -122,8 +140,10 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
     }
     
     ///获取tab的宽度 tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth 有用
-    func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger) -> CGFloat{
-        return position >= 10 ? 80 : 50
+    func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat{
+        
+        let str:NSString = data as! NSString
+        return CGFloat(str.length) * 25
     }
 
 }

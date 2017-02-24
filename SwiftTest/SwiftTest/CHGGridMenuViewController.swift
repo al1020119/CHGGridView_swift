@@ -38,10 +38,19 @@ class CHGGridMenuViewController: UIViewController,CHGMenuViewDataSource,CHGMenuV
     
     func simaluData() -> NSArray {
         let data:NSMutableArray = NSMutableArray()
-        for i in 0 ..< columns * rows * 4{
-            data[i] = i
-        }
-        data.add("测试")
+//        for i in 0 ..< columns * rows * 4{
+//            data[i] = i
+//        }
+        data.add("头条")
+        data.add("要闻")
+        data.add("娱乐")
+        data.add("热点")
+        data.add("体育")
+        data.add("上海")
+        data.add("视频")
+        data.add("网易号")
+        data.add("财经")
+        data.add("轻松一刻")
         return data
     }
     
