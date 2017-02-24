@@ -19,24 +19,17 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
         super.viewDidLoad()
         
         self.automaticallyAdjustsScrollViewInsets = false
-        //Tab的高度
-        tabPage?.tabHeight = 45
-        //代理
-        tabPage?.tabPageDataSource = self
-        //注册nib文件， 类似 UITableViewCell 的用法
-        tabPage?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")
+        
+        tabPage?.tabHeight = 45                         //Tab的高度
+        tabPage?.tabPageDataSource = self               //代理
+        tabPage?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")//注册nib文件， 类似 UITableViewCell 的用法 ,优化性能能
         tabPage?.registerNibName(nibName: "MyCHGGridViewCell2", forCellReuseIdentifier: "MyCHGGridViewCell2")
-        //添加数据，这里的数据可以自己定义
-        tabPage?.data = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13"]
-        //设置Tab的位置，CHGTabLocation.Top 表示Tab在整个view的顶部现实，如果CHGTabLocation.Down 则在整个view的底部显示
+        tabPage?.data = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13"]//添加数据，这里的数据可以自己定义
         tabPage?.tabLocation = CHGTabLocation.Top
-        //设置Tab中的item的宽度，CHGTabItemLayoutMode.AutoWidth表示Tab中的item的宽度由datasource中的方法返回宽度，用户可以使用任意宽度，如果宽度超出屏幕的宽度则可以左右滑动，类似网易新闻中的tab。CHGTabItemLayoutMode.AverageWidth 表示Tab中的item的宽度是屏幕的宽度除以tab的数量
         tabPage?.tabItemLayoutMode = CHGTabItemLayoutMode.AutoWidth
-        //Tab中item的间距
-        tabPage?.spacing = 5
-        //设置Tab中滑块的位置CHGSliderLocation.Down 表示滑块在item的底部。CHGSliderLocation.Top表示滑块在item的顶部
-        tabPage?.sliderLocation = CHGSliderLocation.Down
-        tabPage?.isCycleShow = true
+        tabPage?.spacing = 5                            //Tab中item的间距
+        tabPage?.sliderLocation = CHGSliderLocation.Down//设置Tab中滑块的位置CHGSliderLocation.Down 表示滑块在item的底部。CHGSliderLocation.Top表示滑块在item的顶部
+        tabPage?.isCycleShow = true                     //设置是否可以循环显示
     }
 
     override func didReceiveMemoryWarning() {
@@ -94,6 +87,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
     
     ///返回cell
     func cell(forGridView gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
+        ///
         if position % 2 == 0 {
             let cell:MyCHGGridViewCell = (gridView as! CHGGridView).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
             cell.label?.text = String(describing: data)
@@ -105,7 +99,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
         }
     }
     
-    ///返回TabItem
+    ///返回TabItem, 可以继承CHGTabItem类
     func tab(tab:CHGTab,itemAtIndex position:NSInteger,withData data:AnyObject) -> CHGTabItem {
         let tabItem:CHGTabItem = CHGTabItem.initWithNibName(nibName: "TabItem1")
         tabItem.setItemData(data: data,position: position)
@@ -121,7 +115,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
         return sliderHeight
     }
     
-    ///返回滑块
+    ///返回滑块 可以继承CHGSlider类自定义个性的滑块
     func tabSlider() -> CHGSlider{
         let slider:MySlider = MySlider.initWithNibName(nibName: "MySlider") as! MySlider
         return slider

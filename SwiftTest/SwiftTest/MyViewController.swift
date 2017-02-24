@@ -23,7 +23,7 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         // Do any additional setup after loading the view.
         self.view.backgroundColor = UIColor.white
         gridView?.gridViewDataSource = self;
-        gridView?.data = self.simaluData()//["1","2","3","4","5","6","7","8","9","10","11","12","13"]
+        gridView?.data = self.simaluData()
         gridView?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")
         gridView?.registerNibName(nibName: "MyCHGGridViewCell2", forCellReuseIdentifier: "MyCHGGridViewCell2")
         gridView?.intervalOfCell = CGFloat(lineWidth)
@@ -31,6 +31,7 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         gridView?.isCycleShow = false
     }
     
+    ///构造模拟数据
     func simaluData() -> NSArray {
         let data:NSMutableArray = NSMutableArray()
         for i in 0 ..< columns * rows * 4{
@@ -45,7 +46,7 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         // Dispose of any resources that can be recreated.
     }
     
-    //减少
+    //减少一行 一列
     @IBAction func jian(sender:AnyObject)->Void{
         columns -= 1
         rows -= 1
@@ -55,7 +56,7 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         gridView?.reloadData()
     }
     
-    //增加
+    //增加一行 一列
     @IBAction func jia(sender:AnyObject)->Void{
         columns += 1
         rows += 1
@@ -63,17 +64,17 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         gridView?.reloadData()
     }
     
-    //下一页
+    //展示下一页
     @IBAction func nextPage(sender:AnyObject)->Void{
         gridView?.scroll2Page(page: (gridView?.curryPage)! + 1,animated: true)
     }
     
-    //上一页
+    //展示上一页
     @IBAction func previousPage(sender:AnyObject)->Void{
         gridView?.scroll2Page(page:(gridView?.curryPage)! - 1,animated: true)
     }
     
-    //添加周围线条
+    //显示／关闭周围线条
     @IBAction func aroundLine(sender:AnyObject)->Void {
         aroundLine = !aroundLine
         gridView?.roundLineShow = aroundLine
@@ -97,7 +98,7 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         gridView?.reloadData()
     }
     
-    ///按页显示
+    ///按页／关闭按页显示
     @IBAction func showWithPage(sender:AnyObject)->Void {
         gridView?.isPagingEnabled = !(gridView?.isPagingEnabled)!
         gridView?.scroll2Page(page: (gridView?.curryPage)!, animated: true)
@@ -110,28 +111,18 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         gridView?.reloadData()
     }
     
-    ///定时开关
+    ///定时显示 开／关
     @IBAction func timerShow(sender:AnyObject)->Void {
         gridView?.isTimerShow = !(gridView?.isTimerShow)!
         gridView?.reloadData()
     }
     
-    ///循环显示
+    ///循环显示 开／关
     @IBAction func cycleShow(sender:AnyObject)->Void {
         gridView?.isCycleShow = !(gridView?.isCycleShow)!
         gridView?.reloadData()
     }
-    
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
     ///返回GridView中的rows
     func numberOfRows(inGridView gridView:AnyObject) -> NSInteger {
         return rows

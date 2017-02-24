@@ -31,6 +31,7 @@ class CHGGridMenuViewController: UIViewController,CHGMenuViewDataSource,CHGMenuV
         chgMenu?.isShowPageControl = true
         chgMenu?.isCycleShow = true
         chgMenu?.menuViewShowMode = CHGMenuViewShowMode.Menu
+        chgMenu?.timeInterval = 5//广告模式下 5秒切换一次
         
         
     }
@@ -44,22 +45,26 @@ class CHGGridMenuViewController: UIViewController,CHGMenuViewDataSource,CHGMenuV
         return data
     }
     
+    ///设置为菜单模式
     @IBAction func menuMode(sender:AnyObject)->Void {
         chgMenu?.menuViewShowMode = CHGMenuViewShowMode.Menu
         chgMenu?.isCycleShow = true
         chgMenu?.reloadData()
     }
     
+    ///设置为广告模式
     @IBAction func adMode(sender:AnyObject)->Void {
         chgMenu?.menuViewShowMode = CHGMenuViewShowMode.Ad
         chgMenu?.reloadData()
     }
     
+    ///设置为导航模式
     @IBAction func navMode(sender:AnyObject)->Void {
         chgMenu?.menuViewShowMode = CHGMenuViewShowMode.Navigation
         chgMenu?.reloadData()
     }
     
+    ///设置pageControl是否显示
     @IBAction func showPageControl()->Void {
         chgMenu?.isShowPageControl = !(chgMenu?.isShowPageControl)!
         chgMenu?.reloadData()

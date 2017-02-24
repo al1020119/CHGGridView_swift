@@ -10,8 +10,8 @@ import UIKit
 
 ///CHGTab在CHGTabPage中的位置
 enum CHGTabLocation {
-    case Top
-    case Down
+    case Top        //设置Tab的位置，CHGTabLocation.Top 表示Tab在整个view的顶部现实
+    case Down       //CHGTabLocation.Down 则在整个view的底部显示
 }
 
 ///CHGTabPage的DataSource
@@ -106,7 +106,7 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
         tab?.relaodData()
     }
     
-    ///注册cell的nib文件
+    ///注册nib文件， 类似 UITableViewCell 的用法
     func registerNibName(nibName:NSString, forCellReuseIdentifier identifier:NSString) -> Void {
         gridView?.registerNibName(nibName: nibName, forCellReuseIdentifier: identifier)
     }

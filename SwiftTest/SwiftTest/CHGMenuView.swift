@@ -11,8 +11,8 @@ import UIKit
 ///CHGMenu显示模式
 enum CHGMenuViewShowMode {
     case Menu       //菜单模式
-    case Ad         //广告模式
-    case Navigation //应用首次开启时候的引导模式
+    case Ad         //广告模式此模式下每一页只有一个item
+    case Navigation //应用首次开启时候的引导模式 和广告模式相比不会自动展示下一页
 }
 
 ///CHGMenuView 的代理方法

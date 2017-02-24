@@ -11,13 +11,13 @@ import UIKit
 ///CHGTabItem item展示方式
 enum CHGTabItemLayoutMode {
     case AverageWidth   ///平均宽度
-    case AutoWidth      ///自动宽度
+    case AutoWidth      ///自动宽度（自定义宽度）
 }
 
 ///滑块位置
 enum CHGSliderLocation {
-    case Top
-    case Down
+    case Top        //表示滑块在item的顶部
+    case Down       //表示滑块在item的底部
 }
 
 protocol CHGTabDataSource {
