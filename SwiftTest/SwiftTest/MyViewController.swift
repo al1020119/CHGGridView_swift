@@ -12,7 +12,7 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
     
     @IBOutlet var gridView:CHGGridView?
     
-    var columns = 1
+    var columns = 2
     var rows = 2
     var lineWidth = 1
     var aroundLine:Bool = true
@@ -23,7 +23,7 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         // Do any additional setup after loading the view.
         self.view.backgroundColor = UIColor.white
         gridView?.gridViewDataSource = self;
-        gridView?.data = self.simaluData()
+        gridView?.data = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17"]//self.simaluData()
         gridView?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")
         gridView?.registerNibName(nibName: "MyCHGGridViewCell2", forCellReuseIdentifier: "MyCHGGridViewCell2")
         gridView?.intervalOfCell = CGFloat(lineWidth)

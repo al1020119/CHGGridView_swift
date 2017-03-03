@@ -28,15 +28,15 @@ protocol CHGGridViewDelegate {
 ///CHGGridView滑动delegate
 protocol CHGGridViewScrollDelegate {
     ///手指开始拖动
-    func gridViewWillBeginDragging(_ gridView: CHGGridView)
+    func gridViewWillBeginDragging(_ gridView: CHGGridView)->Void
     ///手指结束拖动
-    func gridViewDidEndDragging(_ gridView: CHGGridView, willDecelerate decelerate: Bool)
+    func gridViewDidEndDragging(_ gridView: CHGGridView, willDecelerate decelerate: Bool)->Void
     ///已经结束减速
-    func gridViewDidEndDecelerating(_ gridView: CHGGridView)
+    func gridViewDidEndDecelerating(_ gridView: CHGGridView)->Void
     ///滑动中
-    func gridViewDidScroll(_ gridView: CHGGridView)
+    func gridViewDidScroll(_ gridView: CHGGridView)->Void
     
-    func gridViewDidEndScrollingAnimation(_ gridView: CHGGridView)
+    func gridViewDidEndScrollingAnimation(_ gridView: CHGGridView)->Void
     ///scrollView 停止滑动
     func scrollViewDidStop(gridView:CHGGridView) -> Void
 }
