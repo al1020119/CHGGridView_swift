@@ -253,7 +253,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     ///按钮被点击
     func itemTouchUpInside(sender:AnyObject) -> Void {
         let cell:CHGGridViewCell = sender as! CHGGridViewCell
-        gridViewDelegate?.gridView(gridView: self, didSelecteAtIndex: sender.tag ,withData: data?.object(at: cell.tag - 1) as AnyObject)
+        gridViewDelegate?.gridView(gridView: self, didSelecteAtIndex: sender.tag ,withData: data?.object(at: cell.tag) as AnyObject)
     }
     
     ///计算cell的frame

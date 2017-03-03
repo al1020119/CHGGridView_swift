@@ -147,11 +147,11 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         return a.1 == 0 ? 1.0 : a.1
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "curryPage" {
-
-        }
-    }
+//    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+//        if keyPath == "curryPage" {
+//
+//        }
+//    }
     
     ///计算frame
     func calculateRect(position:NSInteger) -> CGRect {

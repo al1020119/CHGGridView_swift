@@ -68,7 +68,7 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         self.initView()
-        gridView?.addObserver(tab!, forKeyPath: "curryPage", options: NSKeyValueObservingOptions.new, context: nil)
+//        gridView?.addObserver(tab!, forKeyPath: "curryPage", options: NSKeyValueObservingOptions.new, context: nil)
         gridView?.gridViewScrollDelegate = tab
     }
  
