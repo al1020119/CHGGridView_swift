@@ -17,7 +17,7 @@ enum CHGTabLocation {
 ///CHGTabPage的DataSource
 protocol CHGTabPageDataSource:CHGTabDataSource {
     ///返回Page的cell
-    func cell(forGridView gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell
+    func cell(forTabPage tabPage:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell
 }
 
 class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
@@ -128,7 +128,8 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
     
     ///返回cell
     func cell(forGridView gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
-        return (tabPageDataSource?.cell(forGridView: gridView, itemAtIndex: position, withData: data))!
+        return (tabPageDataSource?.cell(forTabPage: self, itemAtIndex: position, withData: data))!
+//        return (tabPageDataSource?.cell(forGridView: gridView, itemAtIndex: position, withData: data))!
     }
     
     func tabItemTap(position:NSInteger) -> Void {

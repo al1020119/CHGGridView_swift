@@ -104,14 +104,14 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
     
     
     ///返回cell
-    func cell(forGridView gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
+    func cell(forTabPage gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
         ///
         if position % 2 == 0 {
-            let cell:MyCHGGridViewCell = (gridView as! CHGGridView).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
+            let cell:MyCHGGridViewCell = (gridView as! CHGTabPage).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
             cell.label?.text = String(describing: data)
             return cell
         } else {
-            let cell:MyCHGGridViewCell2 = (gridView as! CHGGridView).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell2", withPosition: position) as! MyCHGGridViewCell2
+            let cell:MyCHGGridViewCell2 = (gridView as! CHGTabPage).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell2", withPosition: position) as! MyCHGGridViewCell2
             cell.label?.text = String(describing: data)
             return cell
         }
