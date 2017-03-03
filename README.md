@@ -1,5 +1,5 @@
 #CHGGridView  swift 版本
-项目主要提供ios下的应用启动的导航、广告轮播、左右滑动的菜单、以及tab实现
+项目主要提供ios下的应用启动的导航、广告轮播、左右滑动的菜单、以及tab实现，类似网易新闻客户端风格的tab，tab实现平均分
 Object-C版本地址：
 码云地址： **https://git.oschina.net/chenhaigang/CHGGridView.git** 
 github地址： **https://github.com/chenhaigang888/CHGGridView.git** 
