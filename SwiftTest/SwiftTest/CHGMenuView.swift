@@ -94,37 +94,32 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
         gridView?.isPagingEnabled = true
         gridView?.backgroundColor = self.backgroundColor
         gridView?.gridViewDelegate = self
+        gridView?.gridViewDataSource = self;
+        gridView?.timeInterval = timeInterval
         
+        pageControl?.numberOfPages = self.calculateMaxPage(useColuns: (self.numberOfColumns(inGridView: gridView!)), andRows: (self.numberOfRows(inGridView: gridView!)), withCellCount: (data?.count)!)
         pageControl?.currentPage = (gridView?.curryPage)!
         pageControl?.currentPageIndicatorTintColor = currentPageIndicatorTintColor
         pageControl?.pageIndicatorTintColor = pageIndicatorTintColor
         pageControl?.isUserInteractionEnabled = false
         
         if menuViewShowMode == CHGMenuViewShowMode.Menu {
-            gridView?.gridViewDataSource = self;
             gridView?.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height - (isShowPageControl ? 30 : 0))
             gridView?.isCycleShow = isCycleShow
-            gridView?.timeInterval = timeInterval
+            gridView?.isTimerShow = false///关闭定时器
             
-            pageControl?.numberOfPages = self.calculateMaxPage(useColuns: (self.numberOfColumns(inGridView: gridView!)), andRows: (self.numberOfRows(inGridView: gridView!)), withCellCount: (data?.count)!)
             pageControl?.frame = CGRect(x: 0, y: self.frame.height - 30, width: self.frame.width, height: 30)
         } else if menuViewShowMode == CHGMenuViewShowMode.Ad {
-            gridView?.gridViewDataSource = self;
             gridView?.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
             gridView?.isCycleShow = isCycleShow
             gridView?.isTimerShow = true///开启定时器
-            gridView?.timeInterval = timeInterval
             
-            pageControl?.numberOfPages = self.calculateMaxPage(useColuns: (self.numberOfColumns(inGridView: gridView!)), andRows: (self.numberOfRows(inGridView: gridView!)), withCellCount: (data?.count)!)
             pageControl?.frame = CGRect(x: 0, y: self.frame.height - 30, width: self.frame.width, height: 30)
         } else if menuViewShowMode == CHGMenuViewShowMode.Navigation {
-            gridView?.gridViewDataSource = self;
             gridView?.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
             gridView?.isCycleShow = false///关闭循环功能
             gridView?.isTimerShow = false///关闭定时器
-            gridView?.timeInterval = timeInterval
             
-            pageControl?.numberOfPages = self.calculateMaxPage(useColuns: (self.numberOfColumns(inGridView: gridView!)), andRows: (self.numberOfRows(inGridView: gridView!)), withCellCount: (data?.count)!)
             pageControl?.frame = CGRect(x: 0, y: self.frame.height - 30, width: self.frame.width, height: 30)
         }
     }
