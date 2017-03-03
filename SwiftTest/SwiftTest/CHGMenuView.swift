@@ -18,7 +18,7 @@ enum CHGMenuViewShowMode {
 ///CHGMenuView 的代理方法
 protocol CHGMenuViewDelegate {
     ///当item被点击的时候回掉
-    func menuView(menuView:CHGMenuView, didSelecteAtIndex position:NSInteger) -> Void
+    func menuView(menuView:CHGMenuView, didSelecteAtIndex position:NSInteger,withData data:AnyObject) -> Void
 }
 
 ///CHGMenuView的dataSource
@@ -175,8 +175,8 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
     }
     
     
-    func gridView(gridView:CHGGridView, didSelecteAtIndex position:NSInteger) -> Void {
-        menuViewDelegate?.menuView(menuView: self, didSelecteAtIndex: position)
+    func gridView(gridView:CHGGridView, didSelecteAtIndex position:NSInteger,withData data:AnyObject) -> Void {
+        menuViewDelegate?.menuView(menuView: self, didSelecteAtIndex: position,withData: data)
     }
     
 }

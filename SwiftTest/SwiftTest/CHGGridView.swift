@@ -21,7 +21,7 @@ protocol CHGGridViewDataSource :NSObjectProtocol {
 ///GridView的代理
 protocol CHGGridViewDelegate {
     ///item被点击
-    func gridView(gridView:CHGGridView, didSelecteAtIndex position:NSInteger) -> Void
+    func gridView(gridView:CHGGridView, didSelecteAtIndex position:NSInteger, withData data:AnyObject) -> Void
     
 }
 
@@ -252,7 +252,8 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     
     ///按钮被点击
     func itemTouchUpInside(sender:AnyObject) -> Void {
-        gridViewDelegate?.gridView(gridView: self, didSelecteAtIndex: sender.tag)
+        let cell:CHGGridViewCell = sender as! CHGGridViewCell
+        gridViewDelegate?.gridView(gridView: self, didSelecteAtIndex: sender.tag ,withData: data?.object(at: cell.tag - 1) as AnyObject)
     }
     
     ///计算cell的frame

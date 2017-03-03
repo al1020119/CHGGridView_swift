@@ -106,7 +106,7 @@ class CHGGridMenuViewController: UIViewController,CHGMenuViewDataSource,CHGMenuV
     }
     
     ///当item被点击的时候回掉
-    func menuView(menuView:CHGMenuView, didSelecteAtIndex position:NSInteger) -> Void {
+    func menuView(menuView:CHGMenuView, didSelecteAtIndex position:NSInteger,withData data:AnyObject) -> Void {
         print("position=\(position)")
     }
 
