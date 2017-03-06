@@ -87,7 +87,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             return _isCycleShow
         }
         set {
-            isCycleShowUpdate = true
+            isCycleShowUpdate = _isCycleShow != newValue
             _isCycleShow = newValue
         }
     }
@@ -184,14 +184,11 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
                     }
                 } else {
                     if (curryPage + 1) == pageCount {
-                        
                         self.scroll2Page(page: curryPage , animated: true)
                     } else {
                         self.scroll2Page(page: curryPage - 1, animated: false)
                     }
                 }
-//                print("pageCount:\(pageCount)")
-//                self.scroll2Page(page: curryPage , animated: true)
             }
         } else {
             self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
