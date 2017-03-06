@@ -80,7 +80,7 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
         super.draw(rect)
         
         self.addSubview(gridView!)
-        gridView?.addObserver(self, forKeyPath: "curryPage", options: NSKeyValueObservingOptions.new, context: nil)
+        gridView?.addObserver(self, forKeyPath: "curryPageReal", options: NSKeyValueObservingOptions.new, context: nil)
         
         self.addSubview(pageControl!)
         self.initView()
@@ -98,7 +98,7 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
         gridView?.timeInterval = timeInterval
         
         pageControl?.numberOfPages = self.calculateMaxPage(useColuns: (self.numberOfColumns(inGridView: gridView!)), andRows: (self.numberOfRows(inGridView: gridView!)), withCellCount: (data?.count)!)
-        pageControl?.currentPage = (gridView?.curryPage)!
+        pageControl?.currentPage = (gridView?.curryPageReal)!
         pageControl?.currentPageIndicatorTintColor = currentPageIndicatorTintColor
         pageControl?.pageIndicatorTintColor = pageIndicatorTintColor
         pageControl?.isUserInteractionEnabled = false
@@ -130,9 +130,10 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "curryPage" {
-            let curryPage = (gridView?.curryPage)!
-            pageControl?.currentPage = (gridView?.isCycleShow)! ? curryPage - 1 : curryPage
+        if keyPath == "curryPageReal" {
+//            let curryPage = (gridView?.curryPage)!
+            print("(gridView?.curryPageReal)!:   \((gridView?.curryPageReal)!)")
+            pageControl?.currentPage = (gridView?.curryPageReal)!//(gridView?.isCycleShow)! ? curryPage - 1 : curryPage
         }
     }
     

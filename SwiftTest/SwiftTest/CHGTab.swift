@@ -136,7 +136,8 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     
     func itemTap(sender:AnyObject) -> Void {
         let view:UIView = sender as! UIView
-        tabDelegate?.tabItemTap(position: isCycleShow ? view.tag + 1 : view.tag)
+//        tabDelegate?.tabItemTap(position: isCycleShow ? view.tag + 1 : view.tag)
+        tabDelegate?.tabItemTap(position:view.tag)
     }
     
     

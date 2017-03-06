@@ -202,7 +202,7 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
     ///scrollView 停止滑动
     func scrollViewDidStop(gridView:CHGGridView) -> Void{
         tab?.scrollViewDidStop(gridView: gridView)
-        let page = isCycleShow ? gridView.curryPage - 1 : gridView.curryPage
+        let page = gridView.curryPageReal//isCycleShow ? gridView.curryPage - 1 : gridView.curryPage
         
         tabPageViewDelegate?.tabPage(tabPage: self, pageDidChangeWithPage: page, withCell: (tabPageDataSource?.cell(forTabPage: self, itemAtIndex: page, withData: data?.object(at: page) as AnyObject))!)
     }

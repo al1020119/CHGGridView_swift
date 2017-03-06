@@ -76,21 +76,22 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     var identifiersDic:NSMutableDictionary = NSMutableDictionary()
     ///当前显示的页面
     dynamic var curryPage:NSInteger = 0
+    dynamic var curryPageReal:NSInteger = 0;
     ///是否显示页面分割线
     var isShowPageDivider:Bool = false
     
-    var isCycleShowUpdate:Bool = false;
+//    var isCycleShowUpdate:Bool = false;
     ///是否循环显示
-    var _isCycleShow:Bool = true
-    var isCycleShow: Bool {
-        get {
-            return _isCycleShow
-        }
-        set {
-            isCycleShowUpdate = _isCycleShow != newValue
-            _isCycleShow = newValue
-        }
-    }
+    var isCycleShow:Bool = true
+//    var isCycleShow: Bool {
+//        get {
+//            return _isCycleShow
+//        }
+//        set {
+//            isCycleShowUpdate = _isCycleShow != newValue
+//            _isCycleShow = newValue
+//        }
+//    }
     
     ///缓存页数
     var cacheCount:NSInteger = 2
@@ -124,18 +125,19 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         super.draw(rect)
         self.delegate = self
         self.initView(isFromReload: false)
-        if isCycleShow {
-            self.scroll2Page(page: 1, animated: false)
+        if data == nil || data?.count == 0 {
+            return
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(CHGGridView.onScreenRound), name: NSNotification.Name.UIApplicationDidChangeStatusBarOrientation, object: nil)
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(CHGGridView.onScreenRound), name: NSNotification.Name.UIApplicationDidChangeStatusBarOrientation, object: nil)
         self.startTimer()
     }
     
     
-    ///屏幕旋转
-    func onScreenRound() -> Void {
-
-    }
+//    ///屏幕旋转
+//    func onScreenRound() -> Void {
+//
+//    }
     
     func initView(isFromReload:Bool) -> Void {
 //        self.isPagingEnabled = true
@@ -166,36 +168,42 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
 //        self.createCellsOfPage(page: isFromReload ? isCycleShowUpdate && isCycleShow ? curryPage - 1 : curryPage : isCycleShow ? 1 : 0,isResize: reSize)
 //        self.createCellsOfPage(page: self.calenPageOnRefresh(isFromReload: isFromReload), isResize: reSize)
         
-        self.calenPageOnRefresh(isFromReload: isFromReload)
+//        self.calenPageOnRefresh(isFromReload: isFromReload)
+//        isCycleShowUpdate = false;
         
-        isCycleShowUpdate = false;
+        
+        if data == nil || data?.count == 0 {
+            return
+        }
+        self.createCellsOfPage(page: curryPage, isResize: reSize)
+        self.scroll2Page(page: curryPageReal, animated: false)
+        self.curryPageReal = curryPageReal == 0 ? 0 : curryPageReal
+        
     }
     
-    ///主要计算刷新时候页面
-    func calenPageOnRefresh(isFromReload:Bool) -> Void {
-//        print("curryPage:\(curryPage)")
-        if isFromReload { ///如果是刷新页面
-            if isCycleShowUpdate { ///如果循环状态发生变化
-                if isCycleShow {
-                    if pageCount - 2 == curryPage {
-                        self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
-                    } else {
-                        self.scroll2Page(page: curryPage + 1, animated: false)
-                    }
-                } else {
-                    if (curryPage + 1) == pageCount {
-                        self.scroll2Page(page: curryPage , animated: true)
-                    } else {
-                        self.scroll2Page(page: curryPage - 1, animated: false)
-                    }
-                }
-            }
-        } else {
-            self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
-        }
-        
-        
-    }
+//    ///主要计算刷新时候页面
+//    func calenPageOnRefresh(isFromReload:Bool) -> Void {
+////        print("curryPage:\(curryPage)")
+//        if isFromReload { ///如果是刷新页面
+//            if isCycleShowUpdate { ///如果循环状态发生变化
+//                if isCycleShow {
+//                    if pageCount - 2 == curryPage {
+//                        self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
+//                    } else {
+//                        self.scroll2Page(page: curryPage + 1, animated: false)
+//                    }
+//                } else {
+//                    if (curryPage + 1) == pageCount {
+//                        self.scroll2Page(page: curryPage , animated: true)
+//                    } else {
+//                        self.scroll2Page(page: curryPage - 1, animated: false)
+//                    }
+//                }
+//            }
+//        } else {
+//            self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
+//        }
+//    }
     
     ///移除所有view
     func removeSubviews() -> Void {
@@ -216,7 +224,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         if isTimerShow {
             if timer == nil {
                 timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeInterval), repeats: true) { (Timer) in
-                    let curryPageTemp:NSInteger = self.curryPage + 1
+                    let curryPageTemp:NSInteger = self.curryPageReal + 1
                     self.scroll2Page(page: curryPageTemp >= self.pageCount ? 0 : curryPageTemp, animated: true)
                 }
             }
@@ -244,7 +252,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     
     ///滑动到指定页面
     func scroll2Page(page:NSInteger,animated:Bool) -> Void {
-        let rect = CGRect(x: self.frame.width * CGFloat(page), y: 0, width: self.frame.width, height: self.frame.height)
+        let rect = CGRect(x: self.frame.width * (isCycleShow ? CGFloat(page + 1) : CGFloat(page)), y: 0, width: self.frame.width, height: self.frame.height)
         self.scrollRectToVisible(rect, animated: animated)
     }
     
@@ -425,6 +433,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         
         lastScrollDownX = currScrollX
         self.curryPage = lroundf(Float(scrollView.contentOffset.x / self.frame.size.width))
+        self.curryPageReal = isCycleShow ? curryPage - 1 : curryPage
         if isCycleShow {///循环显示
             if curryPage == 0 && self.contentOffset.x <= 0 {///循环页中的第0页
                 scrollView.contentOffset = CGPoint(x: self.frame.width * CGFloat(pageCount - 2) + self.contentOffset.x, y: 0)
