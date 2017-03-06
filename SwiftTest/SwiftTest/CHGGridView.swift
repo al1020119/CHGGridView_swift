@@ -78,8 +78,20 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     dynamic var curryPage:NSInteger = 0
     ///是否显示页面分割线
     var isShowPageDivider:Bool = false
+    
+    var isCycleShowUpdate:Bool = false;
     ///是否循环显示
-    var isCycleShow:Bool = true
+    var _isCycleShow:Bool = true
+    var isCycleShow: Bool {
+        get {
+            return _isCycleShow
+        }
+        set {
+            isCycleShowUpdate = true
+            _isCycleShow = newValue
+        }
+    }
+    
     ///缓存页数
     var cacheCount:NSInteger = 2
     ///是否定时滚动显示
@@ -151,7 +163,41 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             self.createAllRegisterCellType()
         }
         self.contentSize = CGSize(width: Int(self.frame.size.width) * pageCount, height: 1)
-        self.createCellsOfPage(page: isFromReload ? curryPage : isCycleShow ? 1 : 0,isResize: reSize)
+//        self.createCellsOfPage(page: isFromReload ? isCycleShowUpdate && isCycleShow ? curryPage - 1 : curryPage : isCycleShow ? 1 : 0,isResize: reSize)
+//        self.createCellsOfPage(page: self.calenPageOnRefresh(isFromReload: isFromReload), isResize: reSize)
+        
+        self.calenPageOnRefresh(isFromReload: isFromReload)
+        
+        isCycleShowUpdate = false;
+    }
+    
+    ///主要计算刷新时候页面
+    func calenPageOnRefresh(isFromReload:Bool) -> Void {
+//        print("curryPage:\(curryPage)")
+        if isFromReload { ///如果是刷新页面
+            if isCycleShowUpdate { ///如果循环状态发生变化
+                if isCycleShow {
+                    if pageCount - 2 == curryPage {
+                        self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
+                    } else {
+                        self.scroll2Page(page: curryPage + 1, animated: false)
+                    }
+                } else {
+                    if (curryPage + 1) == pageCount {
+                        
+                        self.scroll2Page(page: curryPage , animated: true)
+                    } else {
+                        self.scroll2Page(page: curryPage - 1, animated: false)
+                    }
+                }
+//                print("pageCount:\(pageCount)")
+//                self.scroll2Page(page: curryPage , animated: true)
+            }
+        } else {
+            self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
+        }
+        
+        
     }
     
     ///移除所有view
@@ -164,6 +210,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     func reloadData() -> Void {
         self.initView(isFromReload: true)
         self.startTimer()
+        
     }
     
     ///开始定时器
@@ -390,6 +437,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             }
             self.createCellsOfPage(page: curryPage, isResize: false)
         }
+//        print("滑动后curryPage:\(curryPage)")
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {

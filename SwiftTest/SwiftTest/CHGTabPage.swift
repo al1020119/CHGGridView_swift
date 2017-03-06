@@ -113,10 +113,10 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
         gridView?.isTimerShow = false///关闭定时器
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.initView()
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        self.initView()
+//    }
     
     func reloadData() -> Void {
         self.initView()
