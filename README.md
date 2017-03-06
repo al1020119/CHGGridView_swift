@@ -4,7 +4,7 @@ Object-C版本地址：
 码云地址： **https://git.oschina.net/chenhaigang/CHGGridView.git** 
 github地址： **https://github.com/chenhaigang888/CHGGridView.git** 
 
-如需帮助或交流可用加QQ群：
+如需帮助或交流可用加QQ群： **494648687** 
 <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=274e6aeebdc86599cdc29b875325b03135f55c73f5d93e95abd576c7480a8270"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="CHGGridView交流群" title="CHGGridView交流群"></a>
 ![输入图片说明](http://git.oschina.net/uploads/images/2017/0306/145642_6eb00505_3935.png "在这里输入图片标题")
 
