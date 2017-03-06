@@ -346,11 +346,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         gridViewScrollDelegate?.gridViewWillBeginDragging(self)
         scrollViewDidEndDragging = false
         scrollViewDidEndDecelerating = false
-//        if scrollDirection == ScrollDirection.left {
-//            self.createCellsOfPage(page: curryPage + 1, isResize: false)
-//        } else if scrollDirection == ScrollDirection.right {
-//            self.createCellsOfPage(page: curryPage - 1, isResize: false)
-//        }
     }
     
     ///手指结束拖动
@@ -394,11 +389,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
                 let xx = self.contentOffset.x - self.frame.width * CGFloat(pageCount - 1)
                 scrollView.contentOffset = CGPoint(x: self.frame.width + xx, y: 0)
             }
-//            else if curryPage == 1 && self.contentOffset.x <= self.frame.width {///当页面第一次出现 并且向右边滑动时侯应该创建最后一页数据
-//                if scrollDirection == ScrollDirection.right {
-//                    self.createCellsOfPage(page: 0, isResize: false)
-//                }
-//            }
             self.createCellsOfPage(page: curryPage, isResize: false)
         }
     }
@@ -413,13 +403,5 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         gridViewScrollDelegate?.scrollViewDidStop(gridView: self)
         scrollViewDidEndDecelerating = true
         scrollDirection = ScrollDirection.stop
-//        //循环滚动逻辑
-//        if isCycleShow {
-//            if curryPage == 0 {
-//                self.scroll2Page(page: pageCount - 2, animated: false)
-//            } else if curryPage == pageCount - 1 {
-//                self.scroll2Page(page: 1, animated: false)
-//            }
-//        }
     }
 }
