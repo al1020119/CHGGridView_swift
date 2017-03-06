@@ -14,15 +14,31 @@ enum CHGTabLocation {
     case Down       //CHGTabLocation.Down 则在整个view的底部显示
 }
 
+
+
 ///CHGTabPage的DataSource
-protocol CHGTabPageDataSource:CHGTabDataSource {
+protocol CHGTabPageDataSource {
+    ///返回TabItem
+    func tabPage(tabPage:CHGTabPage,itemAtIndex position:NSInteger,withData data:AnyObject) -> CHGTabItem
+    ///滑块的高度
+    func tabPageSliderHeight(tabPage:CHGTabPage) -> CGFloat
+    ///返回滑块
+    func tabPageSlider(tabPage:CHGTabPage) -> CHGSlider
+    ///获取tab的宽度 tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth 有用
+    func tabPageScrollWidth(tabPage:CHGTabPage,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat
     ///返回Page的cell
-    func cell(forTabPage tabPage:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell
+    func cell(forTabPage tabPage:CHGTabPage, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell
 }
 
-class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
+protocol CHGTabPageViewDelegate {
+    
+    func tabPage(tabPage:CHGTabPage, pageDidChangeWithPage page:NSInteger, withCell cell:CHGGridViewCell) -> Void
+}
+
+class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,CHGGridViewScrollDelegate{
 
     var gridView:CHGGridView?
+    
     ///滚动试图
     var tab:CHGTab?
     ///CHGTab在CHGTabPage中的位置
@@ -38,6 +54,9 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
     var data:NSArray?
     
     var tabPageDataSource:CHGTabPageDataSource?
+    
+    var tabPageViewDelegate:CHGTabPageViewDelegate?
+    
     
     ///item的宽度模式
     var tabItemLayoutMode:CHGTabItemLayoutMode = CHGTabItemLayoutMode.AverageWidth
@@ -69,14 +88,14 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
         super.draw(rect)
         self.initView()
 //        gridView?.addObserver(tab!, forKeyPath: "curryPage", options: NSKeyValueObservingOptions.new, context: nil)
-        gridView?.gridViewScrollDelegate = tab
+//        gridView?.gridViewScrollDelegate = tab
     }
  
     func initView() -> Void {
         
         tab?.backgroundColor = UIColor.white
         tab?.data = data
-        tab?.tabDataSource = tabPageDataSource
+        tab?.tabDataSource = self
         tab?.tabDelegate = self
         tab?.tabItemLayoutMode = tabItemLayoutMode
         tab?.sliderLocation = sliderLocation
@@ -91,6 +110,7 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
         gridView?.isPagingEnabled = true
         gridView?.backgroundColor = self.backgroundColor
         gridView?.gridViewDataSource = self;
+        gridView?.gridViewScrollDelegate = self
         gridView?.isCycleShow = isCycleShow///关闭循环功能
         gridView?.isTimerShow = false///关闭定时器
     }
@@ -132,8 +152,65 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate{
 //        return (tabPageDataSource?.cell(forGridView: gridView, itemAtIndex: position, withData: data))!
     }
     
+    ///点击tab的item回掉
     func tabItemTap(position:NSInteger) -> Void {
         gridView?.scroll2Page(page: position - 1, animated: true)
     }
+    
+    
+    ///返回TabItem
+    func tab(tab:CHGTab,itemAtIndex position:NSInteger,withData data:AnyObject) -> CHGTabItem {
+        return (tabPageDataSource?.tabPage(tabPage: self, itemAtIndex: position, withData: data))!
+    }
+    ///滑块的高度
+    func tabSliderHeight(tab:CHGTab) -> CGFloat {
+        return (tabPageDataSource?.tabPageSliderHeight(tabPage: self))!
+    }
+    ///返回滑块
+    func tabSlider() -> CHGSlider {
+        return (tabPageDataSource?.tabPageSlider(tabPage: self))!
+    }
+    ///获取tab的宽度 tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth 有用
+    func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat{
+        return (tabPageDataSource?.tabPageScrollWidth(tabPage: self, withPosition: position, withData: data))!
+    }
+    
+    
+    
+    ///手指开始拖动
+    func gridViewWillBeginDragging(_ gridView: CHGGridView)->Void {
+        tab?.gridViewWillBeginDragging(gridView)
+    }
+    
+    ///手指结束拖动
+    func gridViewDidEndDragging(_ gridView: CHGGridView, willDecelerate decelerate: Bool)->Void {
+        tab?.gridViewDidEndDragging(gridView, willDecelerate: decelerate)
+    }
+    
+    ///已经结束减速
+    func gridViewDidEndDecelerating(_ gridView: CHGGridView)->Void {
+        tab?.gridViewDidEndDecelerating(gridView)
+    }
+    
+    ///滑动中
+    func gridViewDidScroll(_ gridView: CHGGridView)->Void {
+        tab?.gridViewDidScroll(gridView)
+    }
+    
+    func gridViewDidEndScrollingAnimation(_ gridView: CHGGridView)->Void {
+        tab?.gridViewDidEndScrollingAnimation(gridView)
+    }
+    
+    ///scrollView 停止滑动
+    func scrollViewDidStop(gridView:CHGGridView) -> Void{
+        tab?.scrollViewDidStop(gridView: gridView)
+        let page = isCycleShow ? gridView.curryPage - 1 : gridView.curryPage
+        
+        tabPageViewDelegate?.tabPage(tabPage: self, pageDidChangeWithPage: page, withCell: (tabPageDataSource?.cell(forTabPage: self, itemAtIndex: page, withData: data?.object(at: page) as AnyObject))!)
+    }
+    
+    
+    
+    
 
 }

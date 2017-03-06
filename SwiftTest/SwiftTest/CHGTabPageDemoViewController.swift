@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
+class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTabPageViewDelegate {
     
     @IBOutlet var tabPage:CHGTabPage?
     
@@ -22,6 +22,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
         
         tabPage?.tabHeight = 45                         //Tab的高度
         tabPage?.tabPageDataSource = self               //代理
+        tabPage?.tabPageViewDelegate = self
         tabPage?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")//注册nib文件， 类似 UITableViewCell 的用法 ,优化性能能
         tabPage?.registerNibName(nibName: "MyCHGGridViewCell2", forCellReuseIdentifier: "MyCHGGridViewCell2")
         tabPage?.data = simaluData()//添加数据，这里的数据可以自己定义
@@ -104,21 +105,23 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
     
     
     ///返回cell
-    func cell(forTabPage gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
+//    func cell(forTabPage gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
+    func cell(forTabPage tabPage: CHGTabPage, itemAtIndex position: NSInteger, withData data: AnyObject) -> CHGGridViewCell {
         ///
-        if position % 2 == 0 {
-            let cell:MyCHGGridViewCell = (gridView as! CHGTabPage).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
+//        if position % 2 == 0 {
+            let cell:MyCHGGridViewCell = tabPage.dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
             cell.label?.text = String(describing: data)
             return cell
-        } else {
-            let cell:MyCHGGridViewCell2 = (gridView as! CHGTabPage).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell2", withPosition: position) as! MyCHGGridViewCell2
-            cell.label?.text = String(describing: data)
-            return cell
-        }
+//        } else {
+//            let cell:MyCHGGridViewCell2 = tabPage.dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell2", withPosition: position) as! MyCHGGridViewCell2
+//            cell.label?.text = String(describing: data)
+//            return cell
+//        }
     }
     
     ///返回TabItem, 可以继承CHGTabItem类
-    func tab(tab:CHGTab,itemAtIndex position:NSInteger,withData data:AnyObject) -> CHGTabItem {
+//    func tab(tab:CHGTab,itemAtIndex position:NSInteger,withData data:AnyObject) -> CHGTabItem {
+    func tabPage(tabPage: CHGTabPage, itemAtIndex position: NSInteger, withData data: AnyObject) -> CHGTabItem {
         let tabItem:CHGTabItem = CHGTabItem.initWithNibName(nibName: "TabItem1")
         tabItem.setItemData(data: data,position: position)
 //        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.green
@@ -126,24 +129,32 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource {
     }
     
     ///滑块的高度
-    func tabSliderHeight(tab:CHGTab) -> CGFloat{
-        if tab.tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
+//    func tabSliderHeight(tab:CHGTab) -> CGFloat{
+    func tabPageSliderHeight(tabPage: CHGTabPage) -> CGFloat {
+        if tabPage.tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
             return 0
         }
         return sliderHeight
     }
     
     ///返回滑块 可以继承CHGSlider类自定义个性的滑块
-    func tabSlider() -> CHGSlider{
+//    func tabSlider() -> CHGSlider{
+    func tabPageSlider(tabPage: CHGTabPage) -> CHGSlider {
         let slider:MySlider = MySlider.initWithNibName(nibName: "MySlider") as! MySlider
         return slider
     }
     
     ///获取tab的宽度 tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth 有用
-    func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat{
-        
+//    func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat{
+    func tabPageScrollWidth(tabPage: CHGTabPage, withPosition position: NSInteger, withData data: AnyObject) -> CGFloat {
         let str:NSString = data as! NSString
         return CGFloat(str.length) * 25
+    }
+    
+    func tabPage(tabPage:CHGTabPage, pageDidChangeWithPage page:NSInteger, withCell cell:CHGGridViewCell) -> Void {
+        let cell_:MyCHGGridViewCell = cell as! MyCHGGridViewCell
+        
+        print("page:\(page)    text:\(cell_.label?.text)")
     }
 
 }

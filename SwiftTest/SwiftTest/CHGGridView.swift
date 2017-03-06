@@ -172,7 +172,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         if isTimerShow {
             if timer == nil {
                 timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeInterval), repeats: true) { (Timer) in
-                    print("a")
                     let curryPageTemp:NSInteger = self.curryPage + 1
                     self.scroll2Page(page: curryPageTemp >= self.pageCount ? 0 : curryPageTemp, animated: true)
                 }
@@ -357,7 +356,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     ///已经结束减速
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         gridViewScrollDelegate?.gridViewDidEndDecelerating(self)
-//        self.scrollViewDidStop(scrollView: scrollView)
+        self.scrollViewDidStop(scrollView: scrollView)
     }
     
     ///滑动中

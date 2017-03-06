@@ -184,10 +184,10 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
             }
             return
         }
-        print("curryPage = \(position)")
+//        print("curryPage = \(position)")
         
         let view1:UIView? = self.findView(ByTag: position + 1, withClassType: CHGTabItem.classForCoder())
-        print("view1 = \(view1)")
+//        print("view1 = \(view1)")
         if view1 != nil {
             let currySelectItem:CHGTabItem = view1 as! CHGTabItem
             currySelectItem.setSelected(selected: true)
