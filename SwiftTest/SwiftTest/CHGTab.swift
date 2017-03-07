@@ -222,14 +222,9 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         if tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
             selectItemWithPosition(position: curryPage,fromReload: false)
         } else {
-//            let view:UIView = self.findView(ByTag: 1, withClassType: CHGTabItem.classForCoder())!
-//            let offsetX = (gridView.contentOffset.x - spacing * CGFloat(curryPage)) / CGFloat((data?.count)!)
-//            slider?.frame.origin = CGPoint(x: offsetX + spacing - (gridView.isCycleShow ? view.frame.width + spacing: 0), y: (slider?.frame.origin.y)!)
+            let x = (slider?.frame.width)! / gridView.frame.width * gridView.contentOffset.x + CGFloat((gridView.isCycleShow ? gridView.curryPage : (gridView.curryPage + 1))) * spacing - (gridView.isCycleShow ? (slider?.frame.width)! : 0)
             
-            let p:CGFloat = gridView.contentOffset.x / gridView.frame.width
-            
-            
-            slider?.frame = CGRect(x: p * (self.frame.width),
+            slider?.frame = CGRect(x: x,
                                    y: (slider?.frame.origin.y)!,
                                    width: (slider?.frame.width)!,
                                    height: (slider?.frame.height)!)

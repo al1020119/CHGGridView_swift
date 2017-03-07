@@ -125,7 +125,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     func tabPage(tabPage: CHGTabPage, itemAtIndex position: NSInteger, withData data: AnyObject) -> CHGTabItem {
         let tabItem:CHGTabItem = CHGTabItem.initWithNibName(nibName: "TabItem1")
         tabItem.setItemData(data: data,position: position)
-        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.blue
+//        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.blue
         return tabItem
     }
     
@@ -153,17 +153,17 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     }
     
     func leftView(inTabPageView tabPage: CHGTabPage) -> UIView? {
-        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 40))
         btn.backgroundColor = UIColor.red
         btn.setTitle("左边", for: UIControlState.normal)
-        return nil
+        return btn
     }
     
     func rightView(inTabPageView tabPage: CHGTabPage) -> UIView? {
-        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 40))
         btn.backgroundColor = UIColor.green
         btn.setTitle("右边", for: UIControlState.normal)
-        return nil
+        return btn
     }
     
     func tabPage(tabPage:CHGTabPage, pageDidChangeWithPage page:NSInteger, withCell cell:CHGGridViewCell) -> Void {
