@@ -31,6 +31,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
         tabPage?.spacing = 5                            //Tab中item的间距
         tabPage?.sliderLocation = CHGSliderLocation.Down//设置Tab中滑块的位置CHGSliderLocation.Down 表示滑块在item的底部。CHGSliderLocation.Top表示滑块在item的顶部
         tabPage?.isCycleShow = true                     //设置是否可以循环显示
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -124,7 +125,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     func tabPage(tabPage: CHGTabPage, itemAtIndex position: NSInteger, withData data: AnyObject) -> CHGTabItem {
         let tabItem:CHGTabItem = CHGTabItem.initWithNibName(nibName: "TabItem1")
         tabItem.setItemData(data: data,position: position)
-//        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.green
+        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.blue
         return tabItem
     }
     
@@ -149,6 +150,20 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     func tabPageScrollWidth(tabPage: CHGTabPage, withPosition position: NSInteger, withData data: AnyObject) -> CGFloat {
         let str:NSString = data as! NSString
         return CGFloat(str.length) * 25
+    }
+    
+    func leftView(inTabPageView tabPage: CHGTabPage) -> UIView? {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
+        btn.backgroundColor = UIColor.red
+        btn.setTitle("左边", for: UIControlState.normal)
+        return nil
+    }
+    
+    func rightView(inTabPageView tabPage: CHGTabPage) -> UIView? {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 40))
+        btn.backgroundColor = UIColor.green
+        btn.setTitle("右边", for: UIControlState.normal)
+        return nil
     }
     
     func tabPage(tabPage:CHGTabPage, pageDidChangeWithPage page:NSInteger, withCell cell:CHGGridViewCell) -> Void {

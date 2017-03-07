@@ -234,11 +234,18 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         if tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
             selectItemWithPosition(position: curryPage,fromReload: false)
         } else {
-            let view:UIView = self.findView(ByTag: 1, withClassType: CHGTabItem.classForCoder())!
-//            let offsetX:CGFloat = (gridView.isCycleShow ? (gridView.contentOffset.x - spacing * CGFloat(curryPage)) / CGFloat((data?.count)!) : (gridView.contentOffset.x - spacing * CGFloat(curryPage)) / CGFloat((data?.count)!))
+//            let view:UIView = self.findView(ByTag: 1, withClassType: CHGTabItem.classForCoder())!
+//            let offsetX = (gridView.contentOffset.x - spacing * CGFloat(curryPage)) / CGFloat((data?.count)!)
+//            slider?.frame.origin = CGPoint(x: offsetX + spacing - (gridView.isCycleShow ? view.frame.width + spacing: 0), y: (slider?.frame.origin.y)!)
             
-            let offsetX = (gridView.contentOffset.x - spacing * CGFloat(curryPage)) / CGFloat((data?.count)!)
-            slider?.frame.origin = CGPoint(x: offsetX + spacing - (gridView.isCycleShow ? view.frame.width + spacing: 0), y: (slider?.frame.origin.y)!)
+            let p:CGFloat = gridView.contentOffset.x / gridView.frame.width
+            
+            
+            slider?.frame = CGRect(x: p * (self.frame.width),
+                                   y: (slider?.frame.origin.y)!,
+                                   width: (slider?.frame.width)!,
+                                   height: (slider?.frame.height)!)
+            
             selectItemWithPosition(position: curryPage, fromReload: false)
         }
     }

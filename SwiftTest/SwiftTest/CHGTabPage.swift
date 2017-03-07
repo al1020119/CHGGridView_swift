@@ -28,6 +28,10 @@ protocol CHGTabPageDataSource {
     func tabPageScrollWidth(tabPage:CHGTabPage,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat
     ///返回Page的cell
     func cell(forTabPage tabPage:CHGTabPage, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell
+    ///添加左边view
+    func leftView(inTabPageView tabPage:CHGTabPage) -> UIView?
+    ///在右边天加一个view
+    func rightView(inTabPageView tabPage:CHGTabPage) -> UIView?
 }
 
 protocol CHGTabPageViewDelegate {
@@ -56,7 +60,6 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
     var tabPageDataSource:CHGTabPageDataSource?
     
     var tabPageViewDelegate:CHGTabPageViewDelegate?
-    
     
     ///item的宽度模式
     var tabItemLayoutMode:CHGTabItemLayoutMode = CHGTabItemLayoutMode.AverageWidth
@@ -91,6 +94,9 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
  
     func initView() -> Void {
         
+        let leftView = tabPageDataSource?.leftView(inTabPageView: self)
+        let rightView = tabPageDataSource?.rightView(inTabPageView: self)
+        
         tab?.backgroundColor = UIColor.white
         tab?.data = data
         tab?.tabDataSource = self
@@ -99,8 +105,27 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
         tab?.sliderLocation = sliderLocation
         tab?.spacing = spacing
         tab?.isCycleShow = isCycleShow
+//        tab?.frame = CGRect(x: 0, y: tabLocation == CHGTabLocation.Top ? 0 : self.frame.height - tabHeight, width: self.frame.width, height: tabHeight)
+        if leftView != nil {
+            leftView?.frame = CGRect(x: 0,
+                                     y: tabLocation == CHGTabLocation.Top ? 0 : self.frame.height - tabHeight,
+                                     width: (leftView?.frame.width)!,
+                                     height: (leftView?.frame.height)!)
+            self.addSubview(leftView!)
+        }
         
-        tab?.frame = CGRect(x: 0, y: tabLocation == CHGTabLocation.Top ? 0 : self.frame.height - tabHeight, width: self.frame.width, height: tabHeight)
+        if rightView != nil {
+            rightView?.frame = CGRect(x: self.frame.width - (rightView?.frame.width)!,
+                                      y: tabLocation == CHGTabLocation.Top ? 0 : self.frame.height - tabHeight,
+                                      width: (rightView?.frame.width)!,
+                                      height: (rightView?.frame.height)!)
+            self.addSubview(rightView!)
+        }
+        tab?.frame = CGRect(x: leftView == nil ? 0 : (leftView?.frame.width)!,
+                            y: tabLocation == CHGTabLocation.Top ? 0 : self.frame.height - tabHeight,
+                            width: self.frame.width - (leftView == nil ? 0 : (leftView?.frame.width)!) - (rightView == nil ? 0 : (rightView?.frame.width)!),
+                            height: tabHeight)
+        
         gridView?.frame = CGRect(x: 0, y: tabLocation == CHGTabLocation.Top ? tabHeight : 0, width: self.frame.width, height: self.frame.height - tabHeight)
         gridView?.data = data
         gridView?.intervalOfCell = intervalOfCell
@@ -207,8 +232,7 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
         tabPageViewDelegate?.tabPage(tabPage: self, pageDidChangeWithPage: page, withCell: (tabPageDataSource?.cell(forTabPage: self, itemAtIndex: page, withData: data?.object(at: page) as AnyObject))!)
     }
     
-    
-    
-    
-
+    func getCurryPageReal() -> NSInteger {
+        return (gridView?.curryPageReal)!
+    }
 }

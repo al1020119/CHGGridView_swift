@@ -76,7 +76,8 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     var identifiersDic:NSMutableDictionary = NSMutableDictionary()
     ///当前显示的页面
     dynamic var curryPage:NSInteger = 0
-    dynamic var curryPageReal:NSInteger = 0;
+    dynamic var curryPageReal:NSInteger = 0
+    dynamic var pageCountReal:NSInteger = 0
     ///是否显示页面分割线
     var isShowPageDivider:Bool = false
     
@@ -160,18 +161,12 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         maxCellsOfOnePage = maxColumnsOfOnePage * maxRowsOfOnePage;
         //获取最多有几页
         pageCount = self.calculateMaxPage(useColuns: maxColumnsOfOnePage, andRows: maxRowsOfOnePage, withCellCount: (data?.count)!,isContainsCyclePage: isCycleShow)
+        pageCountReal = isCycleShow ? pageCount - 2 : pageCount;
         //初始化所有注册的cell
         if !reSize {
             self.createAllRegisterCellType()
         }
         self.contentSize = CGSize(width: Int(self.frame.size.width) * pageCount, height: 1)
-//        self.createCellsOfPage(page: isFromReload ? isCycleShowUpdate && isCycleShow ? curryPage - 1 : curryPage : isCycleShow ? 1 : 0,isResize: reSize)
-//        self.createCellsOfPage(page: self.calenPageOnRefresh(isFromReload: isFromReload), isResize: reSize)
-        
-//        self.calenPageOnRefresh(isFromReload: isFromReload)
-//        isCycleShowUpdate = false;
-        
-        
         if data == nil || data?.count == 0 {
             return
         }
@@ -180,30 +175,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         self.curryPageReal = curryPageReal == 0 ? 0 : curryPageReal
         
     }
-    
-//    ///主要计算刷新时候页面
-//    func calenPageOnRefresh(isFromReload:Bool) -> Void {
-////        print("curryPage:\(curryPage)")
-//        if isFromReload { ///如果是刷新页面
-//            if isCycleShowUpdate { ///如果循环状态发生变化
-//                if isCycleShow {
-//                    if pageCount - 2 == curryPage {
-//                        self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
-//                    } else {
-//                        self.scroll2Page(page: curryPage + 1, animated: false)
-//                    }
-//                } else {
-//                    if (curryPage + 1) == pageCount {
-//                        self.scroll2Page(page: curryPage , animated: true)
-//                    } else {
-//                        self.scroll2Page(page: curryPage - 1, animated: false)
-//                    }
-//                }
-//            }
-//        } else {
-//            self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
-//        }
-//    }
     
     ///移除所有view
     func removeSubviews() -> Void {
