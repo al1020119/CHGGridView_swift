@@ -131,8 +131,6 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "curryPageReal" {
-//            let curryPage = (gridView?.curryPage)!
-            print("(gridView?.curryPageReal)!:   \((gridView?.curryPageReal)!)")
             pageControl?.currentPage = (gridView?.curryPageReal)!//(gridView?.isCycleShow)! ? curryPage - 1 : curryPage
         }
     }
@@ -161,15 +159,16 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
     func numberOfRows(inGridView gridView:AnyObject) -> NSInteger {
         return menuViewShowMode != CHGMenuViewShowMode.Menu ? 1 : (menuViewDataSource?.numberOfRows(inCHGMenuView: self))!
     }
+    
     ///返回GridView中的columns
     func numberOfColumns(inGridView gridView:AnyObject) -> NSInteger {
         return menuViewShowMode != CHGMenuViewShowMode.Menu ? 1 : (menuViewDataSource?.numberOfColumns(inCHGMenuView: self))!
     }
+    
     ///返回cell
     func cell(forGridView gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
         return (menuViewDataSource?.cell(forCHGMenuView: self, itemAtIndex: position, withData: data))!
     }
-    
     
     func gridView(gridView:CHGGridView, didSelecteAtIndex position:NSInteger,withData data:AnyObject) -> Void {
         menuViewDelegate?.menuView(menuView: self, didSelecteAtIndex: position,withData: data)

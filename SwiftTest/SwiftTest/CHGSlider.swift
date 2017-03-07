@@ -14,7 +14,7 @@ class CHGSlider: UIView {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
     }
-    
+
     ///创建cell 通过nib名称
     class func initWithNibName(nibName:NSString)->CHGSlider {
         let nibs =  Bundle.main.loadNibNamed(nibName as String, owner: nil, options: nil)

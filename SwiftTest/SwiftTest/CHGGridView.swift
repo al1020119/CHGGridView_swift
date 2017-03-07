@@ -80,20 +80,8 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     dynamic var pageCountReal:NSInteger = 0
     ///是否显示页面分割线
     var isShowPageDivider:Bool = false
-    
-//    var isCycleShowUpdate:Bool = false;
     ///是否循环显示
     var isCycleShow:Bool = true
-//    var isCycleShow: Bool {
-//        get {
-//            return _isCycleShow
-//        }
-//        set {
-//            isCycleShowUpdate = _isCycleShow != newValue
-//            _isCycleShow = newValue
-//        }
-//    }
-    
     ///缓存页数
     var cacheCount:NSInteger = 2
     ///是否定时滚动显示
@@ -104,7 +92,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     var timer:Timer?
     ///CHGGridView滑动delegate
     var gridViewScrollDelegate:CHGGridViewScrollDelegate?
-    
     ///cell的数据
     var data:NSArray?
     var _data: NSArray {
@@ -173,7 +160,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         self.createCellsOfPage(page: curryPage, isResize: reSize)
         self.scroll2Page(page: curryPageReal, animated: false)
         self.curryPageReal = curryPageReal == 0 ? 0 : curryPageReal
-        
     }
     
     ///移除所有view
@@ -186,7 +172,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     func reloadData() -> Void {
         self.initView(isFromReload: true)
         self.startTimer()
-        
     }
     
     ///开始定时器
@@ -226,13 +211,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let rect = CGRect(x: self.frame.width * (isCycleShow ? CGFloat(page + 1) : CGFloat(page)), y: 0, width: self.frame.width, height: self.frame.height)
         self.scrollRectToVisible(rect, animated: animated)
     }
-    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        if maxColumnsOfOnePage != 0 {
-//            initView()
-//        }
-//    }
     
     ///创建指定页面的cell
     func createCellsOfPage(page:NSInteger, isResize:Bool) -> Void {
@@ -284,7 +262,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let y:CGFloat = CGFloat(y_)*CGFloat(cellHeight) + intervalOfCell * (column == 0 && !roundLineShow ? 0 : CGFloat(column + (roundLineShow ? 1 : 0)))
         
         let x:CGFloat = CGFloat((position % maxColumnsOfOnePage)) * CGFloat(cellWidth) + CGFloat(page) * CGFloat(self.frame.size.width) + intervalOfCell * CGFloat(position % maxColumnsOfOnePage == 0 && !roundLineShow ? 0 : position % maxColumnsOfOnePage + (roundLineShow ? 1 : 0))
-        
         return CGRect(x: x, y: y, width: CGFloat(cellWidth), height: CGFloat(cellHeight))
     }
     
@@ -414,7 +391,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             }
             self.createCellsOfPage(page: curryPage, isResize: false)
         }
-//        print("滑动后curryPage:\(curryPage)")
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
