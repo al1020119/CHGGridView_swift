@@ -79,20 +79,8 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     dynamic var curryPageReal:NSInteger = 0;
     ///是否显示页面分割线
     var isShowPageDivider:Bool = false
-    
-//    var isCycleShowUpdate:Bool = false;
     ///是否循环显示
     var isCycleShow:Bool = true
-//    var isCycleShow: Bool {
-//        get {
-//            return _isCycleShow
-//        }
-//        set {
-//            isCycleShowUpdate = _isCycleShow != newValue
-//            _isCycleShow = newValue
-//        }
-//    }
-    
     ///缓存页数
     var cacheCount:NSInteger = 2
     ///是否定时滚动显示
@@ -103,7 +91,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     var timer:Timer?
     ///CHGGridView滑动delegate
     var gridViewScrollDelegate:CHGGridViewScrollDelegate?
-    
     ///cell的数据
     var data:NSArray?
     var _data: NSArray {
@@ -165,45 +152,13 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             self.createAllRegisterCellType()
         }
         self.contentSize = CGSize(width: Int(self.frame.size.width) * pageCount, height: 1)
-//        self.createCellsOfPage(page: isFromReload ? isCycleShowUpdate && isCycleShow ? curryPage - 1 : curryPage : isCycleShow ? 1 : 0,isResize: reSize)
-//        self.createCellsOfPage(page: self.calenPageOnRefresh(isFromReload: isFromReload), isResize: reSize)
-        
-//        self.calenPageOnRefresh(isFromReload: isFromReload)
-//        isCycleShowUpdate = false;
-        
-        
         if data == nil || data?.count == 0 {
             return
         }
         self.createCellsOfPage(page: curryPage, isResize: reSize)
         self.scroll2Page(page: curryPageReal, animated: false)
         self.curryPageReal = curryPageReal == 0 ? 0 : curryPageReal
-        
     }
-    
-//    ///主要计算刷新时候页面
-//    func calenPageOnRefresh(isFromReload:Bool) -> Void {
-////        print("curryPage:\(curryPage)")
-//        if isFromReload { ///如果是刷新页面
-//            if isCycleShowUpdate { ///如果循环状态发生变化
-//                if isCycleShow {
-//                    if pageCount - 2 == curryPage {
-//                        self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
-//                    } else {
-//                        self.scroll2Page(page: curryPage + 1, animated: false)
-//                    }
-//                } else {
-//                    if (curryPage + 1) == pageCount {
-//                        self.scroll2Page(page: curryPage , animated: true)
-//                    } else {
-//                        self.scroll2Page(page: curryPage - 1, animated: false)
-//                    }
-//                }
-//            }
-//        } else {
-//            self.createCellsOfPage(page: isCycleShow ? 1 : 0, isResize: isFromReload)
-//        }
-//    }
     
     ///移除所有view
     func removeSubviews() -> Void {
@@ -215,7 +170,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     func reloadData() -> Void {
         self.initView(isFromReload: true)
         self.startTimer()
-        
     }
     
     ///开始定时器
@@ -255,13 +209,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let rect = CGRect(x: self.frame.width * (isCycleShow ? CGFloat(page + 1) : CGFloat(page)), y: 0, width: self.frame.width, height: self.frame.height)
         self.scrollRectToVisible(rect, animated: animated)
     }
-    
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        if maxColumnsOfOnePage != 0 {
-//            initView()
-//        }
-//    }
     
     ///创建指定页面的cell
     func createCellsOfPage(page:NSInteger, isResize:Bool) -> Void {
@@ -313,7 +260,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let y:CGFloat = CGFloat(y_)*CGFloat(cellHeight) + intervalOfCell * (column == 0 && !roundLineShow ? 0 : CGFloat(column + (roundLineShow ? 1 : 0)))
         
         let x:CGFloat = CGFloat((position % maxColumnsOfOnePage)) * CGFloat(cellWidth) + CGFloat(page) * CGFloat(self.frame.size.width) + intervalOfCell * CGFloat(position % maxColumnsOfOnePage == 0 && !roundLineShow ? 0 : position % maxColumnsOfOnePage + (roundLineShow ? 1 : 0))
-        
         return CGRect(x: x, y: y, width: CGFloat(cellWidth), height: CGFloat(cellHeight))
     }
     
@@ -443,7 +389,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             }
             self.createCellsOfPage(page: curryPage, isResize: false)
         }
-//        print("滑动后curryPage:\(curryPage)")
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {

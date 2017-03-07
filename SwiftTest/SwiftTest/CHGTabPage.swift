@@ -113,11 +113,6 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
         gridView?.isTimerShow = false///关闭定时器
     }
     
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        self.initView()
-//    }
-    
     func reloadData() -> Void {
         self.initView()
         gridView?.reloadData()
@@ -203,12 +198,6 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
     func scrollViewDidStop(gridView:CHGGridView) -> Void{
         tab?.scrollViewDidStop(gridView: gridView)
         let page = gridView.curryPageReal//isCycleShow ? gridView.curryPage - 1 : gridView.curryPage
-        
         tabPageViewDelegate?.tabPage(tabPage: self, pageDidChangeWithPage: page, withCell: (tabPageDataSource?.cell(forTabPage: self, itemAtIndex: page, withData: data?.object(at: page) as AnyObject))!)
     }
-    
-    
-    
-    
-
 }

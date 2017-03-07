@@ -83,7 +83,6 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         
         self.slider = tabDataSource?.tabSlider()
         self.addSubview(slider!)
-        
         self.initView(isResize: false)
     }
     
@@ -136,7 +135,6 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     
     func itemTap(sender:AnyObject) -> Void {
         let view:UIView = sender as! UIView
-//        tabDelegate?.tabItemTap(position: isCycleShow ? view.tag + 1 : view.tag)
         tabDelegate?.tabItemTap(position:view.tag)
     }
     
@@ -147,12 +145,6 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         let a = modf(ff)
         return a.1 == 0 ? 1.0 : a.1
     }
-    
-//    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-//        if keyPath == "curryPage" {
-//
-//        }
-//    }
     
     ///计算frame
     func calculateRect(position:NSInteger) -> CGRect {
@@ -185,10 +177,7 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
             }
             return
         }
-//        print("curryPage = \(position)")
-        
         let view1:UIView? = self.findView(ByTag: position + 1, withClassType: CHGTabItem.classForCoder())
-//        print("view1 = \(view1)")
         if view1 != nil {
             let currySelectItem:CHGTabItem = view1 as! CHGTabItem
             currySelectItem.setSelected(selected: true)
@@ -230,13 +219,10 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     func gridViewDidScroll(_ gridView: CHGGridView) {
         var curryPage = lroundf(Float(gridView.contentOffset.x / gridView.frame.size.width))
         curryPage = (gridView.isCycleShow) ? curryPage - 1 : curryPage
-        
         if tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
             selectItemWithPosition(position: curryPage,fromReload: false)
         } else {
             let view:UIView = self.findView(ByTag: 1, withClassType: CHGTabItem.classForCoder())!
-//            let offsetX:CGFloat = (gridView.isCycleShow ? (gridView.contentOffset.x - spacing * CGFloat(curryPage)) / CGFloat((data?.count)!) : (gridView.contentOffset.x - spacing * CGFloat(curryPage)) / CGFloat((data?.count)!))
-            
             let offsetX = (gridView.contentOffset.x - spacing * CGFloat(curryPage)) / CGFloat((data?.count)!)
             slider?.frame.origin = CGPoint(x: offsetX + spacing - (gridView.isCycleShow ? view.frame.width + spacing: 0), y: (slider?.frame.origin.y)!)
             selectItemWithPosition(position: curryPage, fromReload: false)
@@ -258,7 +244,7 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     ///以下是当前UIScrollView的滑动监听-------------------------------------------------------------------------------------------------------------------
     ///手指开始拖动
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-//        isStopScroll = false
+
     }
     
     ///手指结束拖动
@@ -268,16 +254,15 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     
     ///已经结束减速
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        isStopScroll = true
+
     }
     
     ///滑动中
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        isStopScroll = false
+        
     }
     ///通过外部触发scrollview滑动后停止的回掉
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-//        isStopScroll = true
         
     }
 }
