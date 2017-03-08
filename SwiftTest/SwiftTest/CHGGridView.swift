@@ -102,6 +102,9 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             self.data = newValue
         }
     }
+    ///标记是否正在创建cell
+    var isCreateCells:Bool = false
+    
     
     override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
@@ -218,9 +221,10 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     
     ///创建指定页面的cell
     func createCellsOfPage(page:NSInteger, isResize:Bool) -> Void {
-        if page >= pageCount || page < 0 {
+        if page >= pageCount || page < 0 || isCreateCells{
             return
         }
+        isCreateCells = true
         var columTemp:NSInteger = -1
         for i in 0 ..< self.calculateCountOfCell(inPage: page) {
             if i % self.maxColumnsOfOnePage == 0 {
@@ -228,6 +232,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             }
             self.createViewWithIndex(i: i, withColumn: columTemp, inPage: page,isResize: isResize)
         }
+        isCreateCells = false
     }
     
     ///创建cell
