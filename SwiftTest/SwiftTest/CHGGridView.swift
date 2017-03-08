@@ -162,12 +162,12 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         self.curryPageReal = curryPageReal == 0 ? 0 : curryPageReal
     }
     
-    ///移除所有view
-    func removeSubviews() -> Void {
-        for view in self.subviews {
-            view.removeFromSuperview()
-        }
-    }
+//    ///移除所有view
+//    func removeSubviews() -> Void {
+//        for view in self.subviews {
+//            view.removeFromSuperview()
+//        }
+//    }
     
     func reloadData() -> Void {
         self.initView(isFromReload: true)

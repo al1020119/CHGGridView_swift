@@ -17,8 +17,13 @@ class CHGTabItem: UIControl {
             return self.curryItemSelected
         }
         set {
+            
             self.curryItemSelected = newValue
         }
+    }
+    
+    func setCurryItemSelected(curryItemSelected:Bool) -> Void {
+        
     }
     
     ///cell的数据
@@ -29,10 +34,6 @@ class CHGTabItem: UIControl {
         self.data = data
     }
     
-    ///当item被点击后此方法会被调用  selected == true 表示被调用,  此方法中写 item被选中后和选择前的变化
-    func setSelected(selected:Bool) -> Void {
-        
-    }
     
     ///变化率
     func onTabScroll(rateChange:CGFloat) -> Void {
@@ -44,15 +45,4 @@ class CHGTabItem: UIControl {
         let nibs =  Bundle.main.loadNibNamed(nibName as String, owner: nil, options: nil)
         return nibs!.last as! CHGTabItem
     }
-    
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-    
-    
-
 }

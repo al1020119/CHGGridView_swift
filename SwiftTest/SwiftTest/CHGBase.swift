@@ -21,4 +21,11 @@ extension UIView {
         return nil
     }
     
+    ///移除subViews
+    func removeSubviews() -> Void {
+        for view in self.subviews {
+            view.removeFromSuperview()
+        }
+    }
+    
 }

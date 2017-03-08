@@ -28,6 +28,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
         tabPage?.data = simaluData()//添加数据，这里的数据可以自己定义
         tabPage?.tabLocation = CHGTabLocation.Top
         tabPage?.tabItemLayoutMode = CHGTabItemLayoutMode.AutoWidth
+        tabPage?.backgroundColor = UIColor.groupTableViewBackground
         tabPage?.spacing = 5                            //Tab中item的间距
         tabPage?.sliderLocation = CHGSliderLocation.Down//设置Tab中滑块的位置CHGSliderLocation.Down 表示滑块在item的底部。CHGSliderLocation.Top表示滑块在item的顶部
         tabPage?.isCycleShow = true                     //设置是否可以循环显示

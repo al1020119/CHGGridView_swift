@@ -80,7 +80,7 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         self.showsHorizontalScrollIndicator = false;
         self.showsVerticalScrollIndicator = false;
         self.delegate = self
-        
+        self.removeSubviews()
         self.slider = tabDataSource?.tabSlider()
         self.addSubview(slider!)
         self.initView(isResize: false)
@@ -102,7 +102,11 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
                 cell.tag = i + 1
                 cell.addTarget(self, action: #selector(itemTap(sender:)), for: UIControlEvents.touchUpInside)
                 cell.setItemData(data: data?.object(at: i) as AnyObject,position: i)
-                cell.curryItemSelected = i == 0 //如果是第一个 默认为选中状态
+//                cell.curryItemSelected = i == 0 //如果是第一个 默认为选中状态
+                if i == currySelectedPosition {
+                    self.currySelectedTabItem = cell;
+                }
+                cell.setCurryItemSelected(curryItemSelected: i == currySelectedPosition)
                 self.addSubview(cell)
                 if tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
                     self.contentSize = CGSize(width: self.contentSize.width + spacing + cell.frame.size.width, height: 1)
@@ -168,7 +172,7 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
                 let view1:UIView? = self.findView(ByTag: position + 1, withClassType: CHGTabItem.classForCoder())
                 if view1 != nil {
                     let currySelectItem:CHGTabItem = view1 as! CHGTabItem
-                    currySelectItem.setSelected(selected: true)
+                    currySelectItem.setCurryItemSelected(curryItemSelected: true)
                     let rect:CGRect = CGRect(x: currySelectItem.center.x - self.frame.width / 2, y: 0, width: self.frame.width, height: self.frame.height)
                     self.scrollRectToVisible(rect, animated: true)
                     currySelectedTabItem = currySelectItem
@@ -180,8 +184,8 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         let view1:UIView? = self.findView(ByTag: position + 1, withClassType: CHGTabItem.classForCoder())
         if view1 != nil {
             let currySelectItem:CHGTabItem = view1 as! CHGTabItem
-            currySelectItem.setSelected(selected: true)
-            currySelectedTabItem?.setSelected(selected: false)
+            currySelectItem.setCurryItemSelected(curryItemSelected: true)
+            currySelectedTabItem?.setCurryItemSelected(curryItemSelected: false)
             let rect:CGRect = CGRect(x: currySelectItem.center.x - self.frame.width / 2, y: 0, width: self.frame.width, height: self.frame.height)
             self.scrollRectToVisible(rect, animated: true)
             currySelectedTabItem = currySelectItem

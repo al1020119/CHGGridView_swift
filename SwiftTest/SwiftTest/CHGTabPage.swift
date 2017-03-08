@@ -42,7 +42,6 @@ protocol CHGTabPageViewDelegate {
 class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,CHGGridViewScrollDelegate{
 
     var gridView:CHGGridView?
-    
     ///滚动试图
     var tab:CHGTab?
     ///CHGTab在CHGTabPage中的位置
@@ -91,13 +90,15 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
         super.draw(rect)
         self.initView()
     }
+    
+    
  
     func initView() -> Void {
         
         let leftView = tabPageDataSource?.leftView(inTabPageView: self)
         let rightView = tabPageDataSource?.rightView(inTabPageView: self)
         
-        tab?.backgroundColor = UIColor.white
+        tab?.backgroundColor = self.backgroundColor
         tab?.data = data
         tab?.tabDataSource = self
         tab?.tabDelegate = self

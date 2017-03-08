@@ -19,8 +19,8 @@ class TabItem1: CHGTabItem {
         label?.text = data as? String
     }
     
-    override func setSelected(selected: Bool) {
-        label?.textColor = selected ? UIColor.red : UIColor.black
+    override func setCurryItemSelected(curryItemSelected: Bool) {
+        label?.textColor = curryItemSelected ? UIColor.red : UIColor.gray
     }
     /*
     // Only override draw() if you perform custom drawing.
