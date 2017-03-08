@@ -22,8 +22,9 @@ class CHGTabItem: UIControl {
         }
     }
     
+    ///此方法可设置当当前按钮被点击时候的颜色等一些属性等操作
     func setCurryItemSelected(curryItemSelected:Bool) -> Void {
-        
+        ///重写此类来设置相信息，比如设置点击按钮前后的颜色
     }
     
     ///cell的数据

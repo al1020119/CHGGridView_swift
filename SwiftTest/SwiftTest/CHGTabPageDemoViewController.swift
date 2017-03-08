@@ -23,7 +23,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
         tabPage?.tabHeight = 45                         //Tab的高度
         tabPage?.tabPageDataSource = self               //代理
         tabPage?.tabPageViewDelegate = self
-        tabPage?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")//注册nib文件， 类似 UITableViewCell 的用法 ,优化性能能
+        tabPage?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")//注册nib文件， 类似 UITableViewCell 的用法 ,优化性能能。可以注册多个nib文件
         tabPage?.registerNibName(nibName: "MyCHGGridViewCell2", forCellReuseIdentifier: "MyCHGGridViewCell2")
         tabPage?.data = simaluData()//添加数据，这里的数据可以自己定义
         tabPage?.tabLocation = CHGTabLocation.Top
@@ -32,7 +32,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
         tabPage?.spacing = 5                            //Tab中item的间距
         tabPage?.sliderLocation = CHGSliderLocation.Down//设置Tab中滑块的位置CHGSliderLocation.Down 表示滑块在item的底部。CHGSliderLocation.Top表示滑块在item的顶部
         tabPage?.isCycleShow = true                     //设置是否可以循环显示
-        
+        ///如果想定义按钮点击后和点击前的效果可用继承CHGTabItem类重新 setCurryItemSelected方法来实现
     }
 
     override func didReceiveMemoryWarning() {
@@ -109,7 +109,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     ///返回cell
 //    func cell(forTabPage gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
     func cell(forTabPage tabPage: CHGTabPage, itemAtIndex position: NSInteger, withData data: AnyObject) -> CHGGridViewCell {
-        ///
+        ///次处可用根据需求返回不同的cell  用法类事UITableViewCell
 //        if position % 2 == 0 {
             let cell:MyCHGGridViewCell = tabPage.dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
             cell.label?.text = String(describing: data)
@@ -122,10 +122,12 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     }
     
     ///返回TabItem, 可以继承CHGTabItem类
+    ///如果想定义按钮点击后和点击前的效果可用继承CHGTabItem类重新 setCurryItemSelected方法来实现
 //    func tab(tab:CHGTab,itemAtIndex position:NSInteger,withData data:AnyObject) -> CHGTabItem {
     func tabPage(tabPage: CHGTabPage, itemAtIndex position: NSInteger, withData data: AnyObject) -> CHGTabItem {
         let tabItem:CHGTabItem = CHGTabItem.initWithNibName(nibName: "TabItem1")
         tabItem.setItemData(data: data,position: position)
+//        设置点击按钮前后的颜色 应该在继承CHGTabItem并且在子类中重写setCurryItemSelected方法
 //        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.blue
         return tabItem
     }
