@@ -180,6 +180,10 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         if isTimerShow {
             if timer == nil {
                 timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeInterval), repeats: true) { (Timer) in
+                    if self.data == nil || self.data?.count == 0 {
+                        self.closeTimer()
+                        return
+                    }
                     let curryPageTemp:NSInteger = self.curryPageReal + 1
                     self.scroll2Page(page: curryPageTemp >= self.pageCount ? 0 : curryPageTemp, animated: true)
                 }
