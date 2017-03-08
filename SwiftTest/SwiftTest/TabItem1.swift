@@ -12,8 +12,6 @@ class TabItem1: CHGTabItem {
 
     @IBOutlet var label:UILabel?
     
-    
-    
     override func setItemData(data: AnyObject,position:NSInteger) {
         super.setItemData(data: data,position: position)
         label?.text = data as? String
