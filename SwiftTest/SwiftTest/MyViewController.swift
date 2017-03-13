@@ -23,9 +23,9 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
         // Do any additional setup after loading the view.
         self.view.backgroundColor = UIColor.white
         gridView?.gridViewDataSource = self;
-        gridView?.data = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17"]//self.simaluData()
+        gridView?.data = self.simaluData()
         gridView?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")
-        gridView?.registerNibName(nibName: "MyCHGGridViewCell2", forCellReuseIdentifier: "MyCHGGridViewCell2")
+//        gridView?.registerNibName(nibName: "MyCHGGridViewCell2", forCellReuseIdentifier: "MyCHGGridViewCell2")
         gridView?.intervalOfCell = CGFloat(lineWidth)
         gridView?.roundLineShow = aroundLine
         gridView?.isCycleShow = false
@@ -133,14 +133,15 @@ class MyViewController: UIViewController ,CHGGridViewDataSource{
     }
     ///返回cell
     func cell(forGridView gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
-        if position % 2 == 0 {
+//        if position % 2 == 0 {
             let cell:MyCHGGridViewCell = (gridView as! CHGGridView).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
+        cell.backgroundColor = position % 2 == 0 ? UIColor.blue : UIColor.yellow
             cell.label?.text = String(describing: data)
             return cell
-        } else {
-            let cell:MyCHGGridViewCell2 = (gridView as! CHGGridView).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell2", withPosition: position) as! MyCHGGridViewCell2
-            cell.label?.text = String(describing: data)
-            return cell
-        }
+//        } else {
+//            let cell:MyCHGGridViewCell2 = (gridView as! CHGGridView).dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell2", withPosition: position) as! MyCHGGridViewCell2
+//            cell.label?.text = String(describing: data)
+//            return cell
+//        }
     }
 }

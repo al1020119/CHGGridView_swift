@@ -75,14 +75,14 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     ///保存identifier  所有注册的cell 类
     var identifiersDic:NSMutableDictionary = NSMutableDictionary()
     ///当前显示的页面
-    dynamic var curryPage:NSInteger = 0
-    var _curryPage: NSInteger {
+    dynamic var _curryPage:NSInteger = 0
+    var curryPage: NSInteger {
         get {
-            return curryPage
+            return _curryPage
         }
         set {
-            curryPage = newValue
-            let curryPageRelTemp:NSInteger = isCycleShow ? curryPage - 1 : curryPage
+            _curryPage = newValue
+            let curryPageRelTemp:NSInteger = isCycleShow ? _curryPage - 1 : _curryPage
             self.curryPageReal = curryPageRelTemp < 0 ? 0 : curryPageRelTemp
         }
     }
@@ -92,14 +92,14 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     ///是否显示页面分割线
     var isShowPageDivider:Bool = false
     ///是否循环显示
-    var isCycleShow:Bool = true
-    var _isCycleShow: Bool {
+    var _isCycleShow:Bool = true
+    var isCycleShow: Bool {
         get {
-            return isCycleShow
+            return _isCycleShow
         }
         set {
-            isCycleShowUpdate = newValue != isCycleShow
-            isCycleShow = newValue
+            isCycleShowUpdate = newValue != _isCycleShow
+            _isCycleShow = newValue
         }
     }
     ///缓存页数
@@ -131,9 +131,9 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     var isCycleShowUpdate:Bool = false;
     
     ///记录page   当页面滑动完毕才会变化
-    var pageValueMax:Float = 0;
+    var pageValueMax:NSInteger = 0;
     ///记录page   当页面滑动完毕才会变化
-    var pageValueMin:Float = 0;
+    var pageValueMin:NSInteger = 0;
     ///从左往右滑动轮回开始
     var isRebirthLeft2RightStart:Bool = false
     ///从右往左滑动轮回开始
@@ -144,11 +144,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     var isRebirthLeft2LeftEnd:Bool = false
     ///判断当前是否已经布局过
     var isLayoutSubView:Bool = false;
-    
-    
-    
-    
-    
     
     override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
@@ -171,7 +166,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     
     func initDefaultValues() -> Void {
         curryCreatedPage = -1
-        self.cacheCount = 2
         self.timeInterval = 1
         self.isShowPageDivider = false
         self.isCycleShow = true
@@ -301,6 +295,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     
     ///创建指定页面的cell
     func createCellsOfPage(page:NSInteger, isResize:Bool) -> Void {
+//        print("================请求创建第 \(page) 页========================")
         if page >= pageCount || page < 0 || isCreateCells{
             return
         }
@@ -314,20 +309,21 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             self.createViewWithIndex(i: i, withColumn: columTemp, inPage: page,isResize: isResize)
         }
         isCreateCells = false
+//        print("================创建第 \(page) 页完成========================")
     }
     
     func calculatePositionWithPage(page:NSInteger, andPosition i:NSInteger, isCycleShow:Bool) -> NSInteger {
         var ii:NSInteger = 0
         if isCycleShow {
             if page + 1 == pageCount {
-                ii = 1
+                ii = i
             } else if page == 0  {
                 ii = i + maxCellsOfOnePage * (pageCount - 3)
             } else {
                 ii = i + maxCellsOfOnePage * page
             }
         } else {
-            if isCycleShow {
+            if self.isCycleShow {
                 if page + 2 ==  pageCount {
                     ii = i
                 } else if page + 1 == 0 {
@@ -347,11 +343,11 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         if gridViewDataSource == nil {
             return
         }
-        let framePosition:NSInteger = self.calculatePositionWithPage(page: page, andPosition: i, isCycleShow: isCycleShow)
-        let dataPosition:NSInteger = self.calculatePositionWithPage(page: isCycleShow ? page - 1 : page, andPosition: i, isCycleShow: false)
-        let cell:CHGGridViewCell = (gridViewDataSource?.cell(forGridView: self, itemAtIndex: isCycleShow ? dataPosition : framePosition, withData: data?.object(at: isCycleShow ? dataPosition : framePosition) as AnyObject))!
+        let framePosition:NSInteger = self.calculatePositionWithPage(page: page, andPosition: i, isCycleShow: _isCycleShow)
+        let dataPosition:NSInteger = self.calculatePositionWithPage(page: _isCycleShow ? page - 1 : page, andPosition: i, isCycleShow: false)
+        let cell:CHGGridViewCell = (gridViewDataSource?.cell(forGridView: self, itemAtIndex: _isCycleShow ? dataPosition : framePosition, withData: data?.object(at: _isCycleShow ? dataPosition : framePosition) as AnyObject))!
         cell.frame = self.calculateFrameWithPosition(position: framePosition , andColumn: column, andPage: page)
-        cell.tag = isCycleShow ? dataPosition : framePosition
+        cell.tag = _isCycleShow ? dataPosition : framePosition
         cell.addTarget(self, action:#selector(itemTouchUpInside(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(cell)
     }
@@ -368,6 +364,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let y:CGFloat = CGFloat(y_)*CGFloat(cellHeight) + intervalOfCell * (column == 0 && !roundLineShow ? 0 : CGFloat(column + (roundLineShow ? 1 : 0)))
         
         let x:CGFloat = CGFloat((position % maxColumnsOfOnePage)) * CGFloat(cellWidth) + CGFloat(page) * CGFloat(self.frame.size.width) + intervalOfCell * CGFloat(position % maxColumnsOfOnePage == 0 && !roundLineShow ? 0 : position % maxColumnsOfOnePage + (roundLineShow ? 1 : 0))
+        print("x:\(x)");
         return CGRect(x: x, y: y, width: CGFloat(cellWidth), height: CGFloat(cellHeight))
     }
     
@@ -381,6 +378,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let cells:NSArray = queue.object(forKey: identifier) as! NSArray
         let p:NSInteger = curryCreatedPage % cacheCount
         let cell:CHGGridViewCell = cells.object(at: position % maxCellsOfOnePage + maxCellsOfOnePage * p) as! CHGGridViewCell
+//        print("什么啊:\(cell)")
         return cell
     }
     
@@ -469,8 +467,8 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         gridViewScrollDelegate?.gridViewDidScroll(self)
         let currScrollX:CGFloat = scrollView.contentOffset.x//当前实时坐标
-        let pageValueMaxTemp:Float = ceilf(Float(scrollView.contentOffset.x / scrollView.frame.size.width))///向上取整数  比如1.1 1.6   都会取2
-        let pageValueMinTemp:Float = floorf(Float(scrollView.contentOffset.x / scrollView.frame.size.width))///向下取整  比如1.1  1.6 都会取1
+        let pageValueMaxTemp:NSInteger = NSInteger(ceilf(Float(scrollView.contentOffset.x / scrollView.frame.size.width)))///向上取整数  比如1.1 1.6   都会取2
+        let pageValueMinTemp:NSInteger = NSInteger(floorf(Float(scrollView.contentOffset.x / scrollView.frame.size.width)))///向下取整  比如1.1  1.6 都会取1
         self.curryPage = lroundf(Float(scrollView.contentOffset.x / scrollView.frame.size.width))//四舍五入   1.1 取1   1.6 取 2
         
         if currScrollX > lastScrollDownX {
@@ -486,9 +484,9 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             if isCycleShow {
                 if self.contentOffset.x >= self.frame.width * CGFloat(pageCount - 1) {
                     isRebirthRight2LeftStart = true
-                    let x:CGFloat = self.contentOffset.x - (self.frame.width * CGFloat(pageCount - 2))
-                    lastScrollDownX = x - 0.0001
-                    scrollView.contentOffset = CGPoint(x: x, y: 0)
+//                    let xx = scrollView.contentOffset.x - (scrollView.frame.width * CGFloat(pageCount - 2))
+                    lastScrollDownX = scrollView.contentOffset.x - (scrollView.frame.width * CGFloat(pageCount - 2)) - 0.0001
+                    scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x - (scrollView.frame.width * CGFloat(pageCount - 2)), y: 0)
                     ///当轮回创建玩第一页  此处应该创建第2页
                     self.createCellsOfPage(page: curryPage + 1, isResize: false)
                 }
