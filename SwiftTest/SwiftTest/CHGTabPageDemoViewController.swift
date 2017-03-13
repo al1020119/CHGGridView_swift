@@ -17,9 +17,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.automaticallyAdjustsScrollViewInsets = false
-        
         tabPage?.tabHeight = 80                         //Tab的高度
         tabPage?.tabPageDataSource = self               //代理
         tabPage?.tabPageViewDelegate = self
@@ -107,49 +105,34 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     
     
     ///返回cell
-//    func cell(forTabPage gridView:AnyObject, itemAtIndex position:NSInteger, withData data:AnyObject) -> CHGGridViewCell {
     func cell(forTabPage tabPage: CHGTabPage, itemAtIndex position: NSInteger, withData data: AnyObject) -> CHGGridViewCell {
         ///次处可用根据需求返回不同的cell  用法类事UITableViewCell
-//        if position % 2 == 0 {
-            let cell:MyCHGGridViewCell = tabPage.dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
-            cell.label?.text = String(describing: data)
-            return cell
-//        } else {
-//            let cell:MyCHGGridViewCell2 = tabPage.dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell2", withPosition: position) as! MyCHGGridViewCell2
-//            cell.label?.text = String(describing: data)
-//            return cell
-//        }
+        let cell:MyCHGGridViewCell = tabPage.dequeueReusableCellWithIdentifier(identifier: "MyCHGGridViewCell", withPosition: position) as! MyCHGGridViewCell
+        cell.label?.text = String(describing: data)
+        return cell
     }
     
     ///返回TabItem, 可以继承CHGTabItem类
     ///如果想定义按钮点击后和点击前的效果可用继承CHGTabItem类重新 setCurryItemSelected方法来实现
-//    func tab(tab:CHGTab,itemAtIndex position:NSInteger,withData data:AnyObject) -> CHGTabItem {
     func tabPage(tabPage: CHGTabPage, itemAtIndex position: NSInteger, withData data: AnyObject) -> CHGTabItem {
         let tabItem:CHGTabItem = CHGTabItem.initWithNibName(nibName: "TabItem1")
         tabItem.setItemData(data: data,position: position)
 //        设置点击按钮前后的颜色 应该在继承CHGTabItem并且在子类中重写setCurryItemSelected方法
-//        tabItem.backgroundColor = position%2 == 0 ? UIColor.yellow : UIColor.blue
         return tabItem
     }
     
     ///滑块的高度
-//    func tabSliderHeight(tab:CHGTab) -> CGFloat{
     func tabPageSliderHeight(tabPage: CHGTabPage) -> CGFloat {
-        if tabPage.tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
-            return 50
-        }
-        return sliderHeight
+        return 50
     }
     
     ///返回滑块 可以继承CHGSlider类自定义个性的滑块
-//    func tabSlider() -> CHGSlider{
     func tabPageSlider(tabPage: CHGTabPage) -> CHGSlider {
         let slider:MySlider = MySlider.initWithNibName(nibName: "MySlider") as! MySlider
         return slider
     }
     
     ///获取tab的宽度 tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth 有用
-//    func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat{
     func tabPageScrollWidth(tabPage: CHGTabPage, withPosition position: NSInteger, withData data: AnyObject) -> CGFloat {
         let str:NSString = data as! NSString
         return CGFloat(str.length) * 25
@@ -171,7 +154,6 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     
     func tabPage(tabPage:CHGTabPage, pageDidChangeWithPage page:NSInteger, withCell cell:CHGGridViewCell) -> Void {
         let cell_:MyCHGGridViewCell = cell as! MyCHGGridViewCell
-        
         print("page:\(page)    text:\(cell_.label?.text)")
     }
 
