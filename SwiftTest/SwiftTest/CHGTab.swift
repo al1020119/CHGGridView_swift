@@ -26,7 +26,7 @@ protocol CHGTabDataSource {
     ///滑块的高度
     func tabSliderHeight(tab:CHGTab) -> CGFloat
     ///返回滑块
-    func tabSlider() -> CHGSlider
+    func tabSlider(tab:CHGTab) -> CHGSlider
     ///获取tab的宽度 tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth 有用
     func tabScrollWidth(tab:CHGTab,withPosition position:NSInteger,withData data:AnyObject) -> CGFloat
 }
@@ -49,6 +49,8 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     var tabDataSource:CHGTabDataSource?
     ///滑块
     var slider:CHGSlider?
+    var sliderC:CHGSlider?
+    
     ///滑块位置
     var sliderLocation:CHGSliderLocation = CHGSliderLocation.Down
     ///滑块高度
@@ -63,6 +65,11 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     var scrollTabItemRects:NSMutableDictionary = NSMutableDictionary()
     ///是否循环现实
     var isCycleShow:Bool = false
+    ///是否已经布局
+    var isLayoutSubView:Bool = false
+    
+    var itemTemp:NSMutableArray = NSMutableArray()
+    
     
     
     override init(frame: CGRect) {
@@ -75,19 +82,12 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         
     }
     
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        self.showsHorizontalScrollIndicator = false;
-        self.showsVerticalScrollIndicator = false;
-        self.delegate = self
-        self.removeSubviews()
-        self.slider = tabDataSource?.tabSlider()
-        self.addSubview(slider!)
-        self.initView(isResize: false)
-    }
-    
     ///初始化数据
     func initView(isResize:Bool) -> Void {
+        if data == nil || data?.count == 0 {
+            return;
+        }
+        itemTemp.removeAllObjects()
         self.sliderHeight = (tabDataSource?.tabSliderHeight(tab: self))!
         if !isResize {
             for v in self.subviews {
@@ -102,12 +102,12 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
                 cell.tag = i + 1
                 cell.addTarget(self, action: #selector(itemTap(sender:)), for: UIControlEvents.touchUpInside)
                 cell.setItemData(data: data?.object(at: i) as AnyObject,position: i)
-//                cell.curryItemSelected = i == 0 //如果是第一个 默认为选中状态
                 if i == currySelectedPosition {
                     self.currySelectedTabItem = cell;
                 }
                 cell.setCurryItemSelected(curryItemSelected: i == currySelectedPosition)
                 self.addSubview(cell)
+                itemTemp.add(cell)
                 if tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
                     self.contentSize = CGSize(width: self.contentSize.width + spacing + cell.frame.size.width, height: 1)
                 }
@@ -116,12 +116,19 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         }
         
         if  tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
-            
+            let width = tabDataSource?.tabSliderHeight(tab: self)
+            slider?.frame = CGRect(x: 0, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: width!, height: sliderHeight)
         } else {
-            let item0Frame = self.calculateRect(position: currySelectedPosition)
+//            let item0Frame = self.calculateRect(position: currySelectedPosition)
+            let item0Frame:CGRect = (itemTemp.object(at: 0) as! CHGTabItem).frame
+            //滑块1
             slider?.frame = CGRect(x: item0Frame.origin.x, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: item0Frame.width, height: sliderHeight)
+            //滑块2
+            sliderC?.frame = CGRect(x: -((slider?.frame.size.width)! + spacing), y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: item0Frame.width, height: sliderHeight)
+            
+            sliderC?.isHidden = !isCycleShow
         }
-        slider?.isHidden = tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth
+        sliderC?.isHidden = tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth
     }
     
     func relaodData() -> Void {
@@ -131,9 +138,18 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        if data != nil {
-            self.initView(isResize: true)
-            selectItemWithPosition(position: currySelectedPosition,fromReload: false)
+        if !isLayoutSubView {
+            isLayoutSubView = true
+            self.showsVerticalScrollIndicator = false
+            self.showsHorizontalScrollIndicator = false
+            self.delegate = self
+            
+            self.removeSubviews()
+            self.slider = tabDataSource?.tabSlider(tab:self)
+            self.sliderC = tabDataSource?.tabSlider(tab:self)
+            self.addSubview(slider!)
+            self.addSubview(sliderC!)
+            self.initView(isResize: false)
         }
     }
     
@@ -141,14 +157,7 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         let view:UIView = sender as! UIView
         tabDelegate?.tabItemTap(position:view.tag)
     }
-    
-    
-    
-    func modfIfCarryMax(f:CGFloat) -> CGFloat {
-        let ff:CGFloat =  f == 0 ? 0.00001 : f
-        let a = modf(ff)
-        return a.1 == 0 ? 1.0 : a.1
-    }
+
     
     ///计算frame
     func calculateRect(position:NSInteger) -> CGRect {
@@ -167,25 +176,11 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
 
     ///设置当前选择的位置
     func selectItemWithPosition(position:NSInteger,fromReload:Bool) -> Void {
-        if position < 0 || position >= (data?.count)! || currySelectedPosition == position {
-            if fromReload {
-                let view1:UIView? = self.findView(ByTag: position + 1, withClassType: CHGTabItem.classForCoder())
-                if view1 != nil {
-                    let currySelectItem:CHGTabItem = view1 as! CHGTabItem
-                    currySelectItem.setCurryItemSelected(curryItemSelected: true)
-                    let rect:CGRect = CGRect(x: currySelectItem.center.x - self.frame.width / 2, y: 0, width: self.frame.width, height: self.frame.height)
-                    self.scrollRectToVisible(rect, animated: true)
-                    currySelectedTabItem = currySelectItem
-                    currySelectedPosition = position
-                }
-            }
-            return
-        }
         let view1:UIView? = self.findView(ByTag: position + 1, withClassType: CHGTabItem.classForCoder())
         if view1 != nil {
             let currySelectItem:CHGTabItem = view1 as! CHGTabItem
-            currySelectItem.setCurryItemSelected(curryItemSelected: true)
             currySelectedTabItem?.setCurryItemSelected(curryItemSelected: false)
+            currySelectItem.setCurryItemSelected(curryItemSelected: true)
             let rect:CGRect = CGRect(x: currySelectItem.center.x - self.frame.width / 2, y: 0, width: self.frame.width, height: self.frame.height)
             self.scrollRectToVisible(rect, animated: true)
             currySelectedTabItem = currySelectItem
@@ -208,33 +203,78 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         
     }
     
-    ///计算滑动的百分比
-    func calculatePercent(ratio:CGFloat,scrollDirection:ScrollDirection) -> CGFloat {
-        if scrollDirection == ScrollDirection.left {
-            return self.modfIfCarryMax(f: ratio)
-        } else if scrollDirection == ScrollDirection.right {
-            return (1 - (1 - self.modfIfCarryMax(f:ratio) == 1 ? 0 : self.modfIfCarryMax(f:ratio)))
-        }
-        return 0
-    }
-    
-    
     ///滑动中
     func gridViewDidScroll(_ gridView: CHGGridView) {
-        var curryPage = lroundf(Float(gridView.contentOffset.x / gridView.frame.size.width))
-        curryPage = (gridView.isCycleShow) ? curryPage - 1 : curryPage
-        if tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
-            selectItemWithPosition(position: curryPage,fromReload: false)
-        } else {
-            let x = (slider?.frame.width)! / gridView.frame.width * gridView.contentOffset.x + CGFloat((gridView.isCycleShow ? gridView.curryPage : (gridView.curryPage + 1))) * spacing - (gridView.isCycleShow ? (slider?.frame.width)! : 0)
+        let rateTemp:CGFloat = gridView.contentOffset.x / gridView.frame.width
+        let minValue = floorf(Float(rateTemp))
+        let maxValue = ceilf(Float(rateTemp))
+        var curryPage = lroundf(Float(rateTemp))
+        curryPage = gridView.isCycleShow ? curryPage - 1 : curryPage
+        self.selectItemWithPosition(position: curryPage, fromReload: false)
+        if tabItemLayoutMode ==  CHGTabItemLayoutMode.AutoWidth {
+            if (Int(maxValue) > (data?.count)! || minValue < 0) || (isCycleShow && minValue == 0) || (!isCycleShow && Int(maxValue) == (data?.count)!) {
+                return
+            }
+            let startView:CHGTabItem = itemTemp.object(at: isCycleShow ? Int(minValue) - 1 : Int(minValue)) as! CHGTabItem
+            let endView:CHGTabItem = itemTemp.object(at: isCycleShow ? Int(maxValue) - 1 : Int(maxValue)) as! CHGTabItem
+            let starX:CGFloat = startView.frame.origin.x
+            let endX:CGFloat = endView.frame.origin.x
             
+            let x:CGFloat = startView.frame.origin.x + (rateTemp - CGFloat(minValue)) * (endX - starX)
+            let w:CGFloat = startView.frame.width + (endView.frame.size.width - startView.frame.size.width) * (rateTemp - CGFloat(minValue))
             slider?.frame = CGRect(x: x,
                                    y: (slider?.frame.origin.y)!,
-                                   width: (slider?.frame.width)!,
-                                   height: (slider?.frame.height)!)
+                                   width: w,
+                                   height: sliderHeight)
+            slider?.scrollRate(rate: rateTemp - CGFloat(minValue), leftItem: startView, rightItem: endView)
+        } else {
+            if isCycleShow {
+                let array:NSArray = self.calculateSliderRectWithGridView(gridView: gridView)
+                slider?.frame = CGRect(x: array.object(at: 0) as! CGFloat,
+                                       y: (slider?.frame.origin.y)!,
+                                       width: (slider?.frame.width)!,
+                                       height: (slider?.frame.height)!)
+                sliderC?.frame = CGRect(x: array.object(at: 1) as! CGFloat,
+                                        y: (sliderC?.frame.origin.y)!,
+                                        width: (sliderC?.frame.width)!,
+                                        height: (sliderC?.frame.height)!)
+            } else {
+                let x:CGFloat = rateTemp * ((slider?.frame.width)! + spacing) + spacing
+                slider?.frame = CGRect(x: x,
+                                       y: (slider?.frame.origin.y)!,
+                                       width: (slider?.frame.width)!,
+                                       height: (slider?.frame.height)!)
+            }
             
-            selectItemWithPosition(position: curryPage, fromReload: false)
+            if Int(maxValue) > (data?.count)! || minValue <= 0 {
+                return
+            }
+            let startView:CHGTabItem = itemTemp.object(at: Int(minValue) - 1) as! CHGTabItem
+            let endView:CHGTabItem = itemTemp.object(at: Int(maxValue) - 1) as! CHGTabItem
+            slider?.scrollRate(rate: rateTemp - CGFloat(minValue), leftItem: startView, rightItem: endView)
+            sliderC?.scrollRate(rate: rateTemp - CGFloat(minValue), leftItem: startView, rightItem: endView)
+            
         }
+    }
+    
+    func calculateSliderRectWithGridView(gridView:CHGGridView) -> NSArray {
+        let rateTemp:CGFloat = gridView.contentOffset.x / gridView.frame.size.width
+        
+        let x:CGFloat = (rateTemp - 1) * ((slider?.frame.size.width)! + spacing) + spacing
+        var xCopy:CGFloat = 0
+        
+        if gridView.contentOffset.x < gridView.frame.size.width {
+            xCopy = ((slider?.frame.size.width)! + spacing) * CGFloat(gridView.pageCount - 2) + x
+        } else {
+            xCopy = -((slider?.frame.size.width)! + spacing)
+        }
+        
+        if gridView.contentOffset.x > gridView.frame.size.width * CGFloat(gridView.pageCount - 2) {
+            xCopy = x - CGFloat(gridView.pageCount - 2) * ((slider?.frame.size.width)! + spacing)
+        }
+        
+        return [x,xCopy]
+        
     }
     
     func gridViewDidEndScrollingAnimation(_ gridView: CHGGridView){
@@ -245,8 +285,6 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
     func scrollViewDidStop(gridView:CHGGridView) -> Void {
         
     }
-    
-    
     
     
     ///以下是当前UIScrollView的滑动监听-------------------------------------------------------------------------------------------------------------------

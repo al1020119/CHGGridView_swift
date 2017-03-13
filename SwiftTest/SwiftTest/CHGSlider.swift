@@ -21,5 +21,9 @@ class CHGSlider: UIView {
         return nibs!.last as! CHGSlider
     }
     
+    ///当页面滑动的时候 会传递 当前滑动进度  以及 左边和右边的按钮
+    func scrollRate(rate:CGFloat,leftItem:CHGTabItem,rightItem:CHGTabItem) -> Void {
+        
+    }
     
 }

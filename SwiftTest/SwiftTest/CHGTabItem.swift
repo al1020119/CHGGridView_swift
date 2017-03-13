@@ -11,14 +11,13 @@ import UIKit
 ///此类是TabPage中选项的item类。写此类可以实现不通的风格
 class CHGTabItem: UIControl {
     
-    var curryItemSelected:Bool = false
-    var _curryItemSelected: Bool {
+    var _curryItemSelected:Bool = false
+    var curryItemSelected: Bool {
         get {
-            return self.curryItemSelected
+            return _curryItemSelected
         }
         set {
-            
-            self.curryItemSelected = newValue
+            _curryItemSelected = newValue
         }
     }
     

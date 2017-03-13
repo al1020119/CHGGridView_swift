@@ -67,6 +67,9 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
     
     var isCycleShow:Bool = false
     
+    var isLayoutSubView:Bool = false
+    
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -86,12 +89,12 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
         self.addSubview(tab!)
     }
     
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        self.initView()
+    override func layoutSubviews() {
+        if !isLayoutSubView {
+            isLayoutSubView = true
+            self.initView()
+        }
     }
-    
-    
  
     func initView() -> Void {
         
@@ -186,7 +189,7 @@ class CHGTabPage: UIView ,CHGGridViewDataSource,CHGTabDelegate,CHGTabDataSource,
         return (tabPageDataSource?.tabPageSliderHeight(tabPage: self))!
     }
     ///返回滑块
-    func tabSlider() -> CHGSlider {
+    func tabSlider(tab: CHGTab) -> CHGSlider {
         return (tabPageDataSource?.tabPageSlider(tabPage: self))!
     }
     ///获取tab的宽度 tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth 有用

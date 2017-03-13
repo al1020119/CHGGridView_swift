@@ -59,6 +59,7 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
     ///显示模式，默认为菜单模式
     var menuViewShowMode:CHGMenuViewShowMode = CHGMenuViewShowMode.Menu
     
+    var isLayoutSubView:Bool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -74,16 +75,6 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
     func createView() -> Void {
         self.gridView = CHGGridView()
         self.pageControl = UIPageControl()
-    }
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        
-        self.addSubview(gridView!)
-        gridView?.addObserver(self, forKeyPath: "curryPageReal", options: NSKeyValueObservingOptions.new, context: nil)
-        
-        self.addSubview(pageControl!)
-        self.initView()
     }
  
     func initView() -> Void {
@@ -135,9 +126,19 @@ class CHGMenuView: UIView,CHGGridViewDataSource,CHGGridViewDelegate{
         }
     }
     
+    deinit {
+        gridView?.removeObserver(self, forKeyPath: "curryPageReal")
+    }
+    
     override func layoutSubviews() {
-        super.layoutSubviews()
-        self.initView()
+        if !isLayoutSubView {
+            isLayoutSubView = true
+            self.addSubview(gridView!)
+            gridView?.addObserver(self, forKeyPath: "curryPageReal", options: NSKeyValueObservingOptions.new, context: nil)
+            
+            self.addSubview(pageControl!)
+            self.initView()
+        }
     }
     
     ///计算总共有几页

@@ -364,7 +364,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let y:CGFloat = CGFloat(y_)*CGFloat(cellHeight) + intervalOfCell * (column == 0 && !roundLineShow ? 0 : CGFloat(column + (roundLineShow ? 1 : 0)))
         
         let x:CGFloat = CGFloat((position % maxColumnsOfOnePage)) * CGFloat(cellWidth) + CGFloat(page) * CGFloat(self.frame.size.width) + intervalOfCell * CGFloat(position % maxColumnsOfOnePage == 0 && !roundLineShow ? 0 : position % maxColumnsOfOnePage + (roundLineShow ? 1 : 0))
-        print("x:\(x)");
         return CGRect(x: x, y: y, width: CGFloat(cellWidth), height: CGFloat(cellHeight))
     }
     
@@ -378,7 +377,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         let cells:NSArray = queue.object(forKey: identifier) as! NSArray
         let p:NSInteger = curryCreatedPage % cacheCount
         let cell:CHGGridViewCell = cells.object(at: position % maxCellsOfOnePage + maxCellsOfOnePage * p) as! CHGGridViewCell
-//        print("什么啊:\(cell)")
         return cell
     }
     

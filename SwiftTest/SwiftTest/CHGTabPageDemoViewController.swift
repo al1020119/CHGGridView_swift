@@ -20,7 +20,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
         
         self.automaticallyAdjustsScrollViewInsets = false
         
-        tabPage?.tabHeight = 45                         //Tab的高度
+        tabPage?.tabHeight = 80                         //Tab的高度
         tabPage?.tabPageDataSource = self               //代理
         tabPage?.tabPageViewDelegate = self
         tabPage?.registerNibName(nibName: "MyCHGGridViewCell", forCellReuseIdentifier: "MyCHGGridViewCell")//注册nib文件， 类似 UITableViewCell 的用法 ,优化性能能。可以注册多个nib文件
@@ -136,7 +136,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
 //    func tabSliderHeight(tab:CHGTab) -> CGFloat{
     func tabPageSliderHeight(tabPage: CHGTabPage) -> CGFloat {
         if tabPage.tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
-            return 0
+            return 50
         }
         return sliderHeight
     }
