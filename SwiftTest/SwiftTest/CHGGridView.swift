@@ -482,7 +482,6 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
             if isCycleShow {
                 if self.contentOffset.x >= self.frame.width * CGFloat(pageCount - 1) {
                     isRebirthRight2LeftStart = true
-//                    let xx = scrollView.contentOffset.x - (scrollView.frame.width * CGFloat(pageCount - 2))
                     lastScrollDownX = scrollView.contentOffset.x - (scrollView.frame.width * CGFloat(pageCount - 2)) - 0.0001
                     scrollView.contentOffset = CGPoint(x: scrollView.contentOffset.x - (scrollView.frame.width * CGFloat(pageCount - 2)), y: 0)
                     ///当轮回创建玩第一页  此处应该创建第2页
