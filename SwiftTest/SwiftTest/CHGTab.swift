@@ -117,11 +117,9 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         
         if  tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
             let width = tabDataSource?.tabSliderHeight(tab: self)
-//            slider?.frame = CGRect(x: 0, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: width!, height: sliderHeight)
             slider?.frame = CGRect(x: (slider?.frame.origin.x)!, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: (slider?.frame.size.width == 0 ? width : slider?.frame.size.width)!, height: sliderHeight)
         } else {
             let item0Frame = self.calculateRect(position: currySelectedPosition)
-//            let item0Frame:CGRect = (itemTemp.object(at: 0) as! CHGTabItem).frame
             //滑块1
             slider?.frame = CGRect(x: item0Frame.origin.x, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: item0Frame.width, height: sliderHeight)
             //滑块2
@@ -183,7 +181,7 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
             currySelectedTabItem?.setCurryItemSelected(curryItemSelected: false)
             currySelectItem.setCurryItemSelected(curryItemSelected: true)
             let rect:CGRect = CGRect(x: currySelectItem.center.x - self.frame.width / 2, y: 0, width: self.frame.width, height: self.frame.height)
-            self.scrollRectToVisible(rect, animated: true)
+            self.scrollRectToVisible(rect, animated: !fromReload)
             currySelectedTabItem = currySelectItem
             currySelectedPosition = position
         }

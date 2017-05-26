@@ -12,7 +12,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     
     @IBOutlet var tabPage:CHGTabPage?
     
-    var sliderHeight:CGFloat = 1
+    var sliderHeight:CGFloat = 50
     
 
     override func viewDidLoad() {
@@ -123,7 +123,7 @@ class CHGTabPageDemoViewController: UIViewController,CHGTabPageDataSource,CHGTab
     
     ///滑块的高度
     func tabPageSliderHeight(tabPage: CHGTabPage) -> CGFloat {
-        return 50
+        return sliderHeight
     }
     
     ///返回滑块 可以继承CHGSlider类自定义个性的滑块

@@ -254,14 +254,7 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         ///启动定时器
         if isTimerShow {
             if timer == nil {
-                timer = Timer.scheduledTimer(withTimeInterval: TimeInterval(timeInterval), repeats: true) { (Timer) in
-                    if self.data == nil || self.data?.count == 0 {
-                        self.closeTimer()
-                        return
-                    }
-                    let curryPageTemp:NSInteger = self.curryPageReal + 1
-                    self.scroll2Page(page: curryPageTemp >= self.pageCount ? 0 : curryPageTemp, animated: true)
-                }
+                timer = Timer.scheduledTimer(timeInterval: TimeInterval(timeInterval), target: self, selector: #selector(backgroundTask), userInfo: nil, repeats: true)
             } else {
                 
             }
@@ -270,6 +263,15 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
                 self.closeTimer()
             }
         }
+    }
+    
+    func backgroundTask() -> Void {
+        if self.data == nil || self.data?.count == 0 {
+            self.closeTimer()
+            return
+        }
+        let curryPageTemp:NSInteger = self.curryPageReal + 1
+        self.scroll2Page(page: curryPageTemp >= self.pageCount ? 0 : curryPageTemp, animated: true)
     }
     
     ///关闭定时器
