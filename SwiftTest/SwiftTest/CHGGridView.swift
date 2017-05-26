@@ -527,4 +527,33 @@ class CHGGridView: UIScrollView,UIScrollViewDelegate{
         scrollViewDidEndDecelerating = true
         scrollDirection = ScrollDirection.stop
     }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if self.panBack(gestureRecognizer) {
+            return true
+        }
+        return false
+    }
+    
+    func panBack(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer == self.panGestureRecognizer {
+            let pan:UIPanGestureRecognizer = gestureRecognizer as!  UIPanGestureRecognizer
+            let point:CGPoint = pan.translation(in: self)
+            let state:UIGestureRecognizerState = gestureRecognizer.state
+            if UIGestureRecognizerState.began == state || UIGestureRecognizerState.possible == state {
+                let location = gestureRecognizer.location(in: self)
+                if point.x > 0 && location.x < 90 && self.contentOffset.x <= 0 {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if self.panBack(gestureRecognizer) {
+            return false
+        }
+        return true
+    }
 }
