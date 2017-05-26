@@ -117,10 +117,11 @@ class CHGTab: UIScrollView ,CHGGridViewScrollDelegate,UIScrollViewDelegate{
         
         if  tabItemLayoutMode == CHGTabItemLayoutMode.AutoWidth {
             let width = tabDataSource?.tabSliderHeight(tab: self)
-            slider?.frame = CGRect(x: 0, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: width!, height: sliderHeight)
+//            slider?.frame = CGRect(x: 0, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: width!, height: sliderHeight)
+            slider?.frame = CGRect(x: (slider?.frame.origin.x)!, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: (slider?.frame.size.width == 0 ? width : slider?.frame.size.width)!, height: sliderHeight)
         } else {
-//            let item0Frame = self.calculateRect(position: currySelectedPosition)
-            let item0Frame:CGRect = (itemTemp.object(at: 0) as! CHGTabItem).frame
+            let item0Frame = self.calculateRect(position: currySelectedPosition)
+//            let item0Frame:CGRect = (itemTemp.object(at: 0) as! CHGTabItem).frame
             //滑块1
             slider?.frame = CGRect(x: item0Frame.origin.x, y: sliderLocation == CHGSliderLocation.Down ? self.frame.height - sliderHeight : 0, width: item0Frame.width, height: sliderHeight)
             //滑块2
